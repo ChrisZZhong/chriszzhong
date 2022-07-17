@@ -13,31 +13,20 @@
 
 ## XX. Divide Two Integers <a id="#"></a>
 
-<details>
-    <summary>See problem</summary>
-
 <p>solution : use bit operation to solve this problem 利用位运算实现除法</p>
-   
-<details>
-    <summary>code</summary>
 
 ```Java
 
 ```
 
-</details>
 <p><strong>TC : O(1) --> Max 32 bit</strong></p>
 <p><strong>SC : O(1)</strong></p>
-</details>
 
 &nbsp;
 
 # algorithm
 
 ## 29. Divide Two Integers <a id="29"></a>
-
-<details>
-    <summary>See problem</summary>
 
 <div class="notranslate">
     <p>Given two integers 
@@ -66,9 +55,6 @@
 </div>
 <p>solution : use bit operation to solve this problem 利用位运算实现除法</p>
 <img src = "./photo/整数除法位运算.png">
-   
-<details>
-    <summary>code</summary>
 
 ```Java
 class Solution {
@@ -113,19 +99,14 @@ class Solution {
 }
 ```
 
-</details>
 <p><strong>TC : O(1) --> Max 32 bit</strong></p>
 <p><strong>SC : O(1)</strong></p>
-</details>
 
 &nbsp;
 
 ## 67. Add Binary <a id="67"></a>
 
 ### (new Method: StringBuilder.insert(index, value))
-
-<details>
-    <summary>See problem</summary>
 
 <div class="notranslate">
     <p>Given two binary strings <code>a</code> and <code>b</code>, return <em>their sum as a binary string</em>.</p>
@@ -146,9 +127,6 @@ class Solution {
 </div>
 
 <p><strong>solution1 : it is like the add two linked list, use StringBuilder to save the result</strong></p>
-
-<details>
-    <summary>code</summary>
 
 ```Java
 class Solution {
@@ -182,22 +160,15 @@ class Solution {
 }
 ```
 
-</details>
-
 <p><strong>TC : O(n) --> n is the max length of a or b</strong></p>
 <p><strong>SC : O(1) extra space</strong></p>
 
 <p><strong>solution2 : use bit operation to do this</strong></p>
 TODO
 
-</details>
-
 &nbsp;
 
 ## 338. Counting Bits <a id="338"></a>
-
-<details>
-    <summary>See problem</summary>
 
 <div class="notranslate"><p>Given an integer <code>n</code>, return <em>an array </em><code>ans</code><em> of length </em><code>n + 1</code><em> such that for each </em><code>i</code><em> </em>(<code>0 &lt;= i &lt;= n</code>)<em>, </em><code>ans[i]</code><em> is the <strong>number of </strong></em><code>1</code><em><strong>'s</strong> in the binary representation of </em><code>i</code>.</p>
 
@@ -246,8 +217,6 @@ TODO
 ## solution1 : Brian Kernighan x=x & (x−1) to set last 1 to 0
 
 <p>Repeat until X == 0</p>
-<details>
-    <summary>code</summary>
 
 ```Java
 class Solution {
@@ -270,7 +239,6 @@ class Solution {
 }
 ```
 
-</details>
 <p><strong>TC : O(nlogn) --> n numbers/ each logn to traverse</strong></p>
 <p><strong>SC : O(1)</strong></p>
 
@@ -280,8 +248,6 @@ class Solution {
 
 <p><strong>y is 2^n when y & (y - 1) = 0</strong></p>
 <p><strong>bits[i] = bits[i - highBit] + 1;</strong></p>
-<details>
-    <summary>code</summary>
 
 ```Java
 class Solution {
@@ -299,7 +265,5 @@ class Solution {
 }
 ```
 
-</details>
 <p><strong>TC : O(n) --> n numbers/ each O(1)</strong></p>
 <p><strong>SC : O(1)</strong></p>
-</details>
