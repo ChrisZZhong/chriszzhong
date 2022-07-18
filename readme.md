@@ -1,15 +1,23 @@
-# Bit operation for Integer --> add/time/divide/minus
+# leetcode 剑指 offer
 
 [29. Divide Two Integers](#29)
 
 [67. Add Binary](#67)
 
 [338. Counting Bits](#338)
+
+[137. Single Number II](#137)
+
+[318. Maximum Product of Word Lengths](#318)
+
+[209. Minimum Size Subarray Sum](#209)
 &nbsp;
 
 # demo
 
 &nbsp;
+
+<!-- from here -->
 
 ## XX. Divide Two Integers <a id="#"></a>
 
@@ -23,6 +31,8 @@
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
+
+<!-- to here -->
 
 # algorithm
 
@@ -267,3 +277,162 @@ class Solution {
 
 <p><strong>TC : O(n) --> n numbers/ each O(1)</strong></p>
 <p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 137. Single Number II <a id="137"></a>
+
+<div class="notranslate"><p>Given an integer array <code>nums</code> where&nbsp;every element appears <strong>three times</strong> except for one, which appears <strong>exactly once</strong>. <em>Find the single element and return it</em>.</p>
+
+<p>You must&nbsp;implement a solution with a linear runtime complexity and use&nbsp;only constant&nbsp;extra space.</p>
+
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> nums = [2,2,3,2]
+<strong>Output:</strong> 3
+</pre><p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> nums = [0,1,0,1,0,1,99]
+<strong>Output:</strong> 99
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= nums.length &lt;= 3 * 10<sup>4</sup></code></li>
+	<li><code>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</code></li>
+	<li>Each element in <code>nums</code> appears exactly <strong>three times</strong> except for one element which appears <strong>once</strong>.</li>
+</ul>
+</div>
+
+<p><strong>Solution1: use hashmap with SC: O(nlogn)</strong></p>
+
+<p><strong>Solution2: use bit operation to solve this problem 利用位运算实现除法</strong></p>
+
+```Java
+/*
+Any bit of the sum of three same number %3 == 0. So we can find for bit i, if the X % 3 != 0, that's the bit of the number we want.
+*/
+class Solution {
+    public int singleNumber(int[] nums) {
+        int ans = 0;
+        for (int i = 0; i < 32; ++i) {
+            int total = 0;
+            for (int num: nums) {
+                total += ((num >> i) & 1);
+            }
+            if (total % 3 != 0) {
+                ans |= (1 << i);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n * logC) -->C Max 32 bit</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 318. Maximum Product of Word Lengths <a id="318"></a>
+
+<p><strong>Solution : bit operation</strong></p>
+<img src = "./photo/318.png">
+
+```Java
+class Solution {
+    public int maxProduct(String[] words) {
+        int length = words.length;
+        int[] masks = new int[length];
+        for (int i = 0; i < length; i++) {
+            String word = words[i];
+            int wordLength = word.length();
+            for (int j = 0; j < wordLength; j++) {
+                masks[i] |= 1 << (word.charAt(j) - 'a');
+            }
+        }
+        int maxProd = 0;
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                if ((masks[i] & masks[j]) == 0) {
+                    maxProd = Math.max(maxProd, words[i].length() * words[j].length());
+                }
+            }
+        }
+        return maxProd;
+    }
+}
+```
+
+<p><strong>TC : O(n^2) --> combination of each word is n^2 and O(1) to check if there is an overlap character</strong></p>
+<p><strong>SC : O(n) --> bitmask array</strong></p>
+
+&nbsp;
+
+## 209. Minimum Size Subarray Sum <a id="209"></a>
+
+<div class="notranslate"><p>Given an array of positive integers <code>nums</code> and a positive integer <code>target</code>, return the minimal length of a <strong>contiguous subarray</strong> <code>[nums<sub>l</sub>, nums<sub>l+1</sub>, ..., nums<sub>r-1</sub>, nums<sub>r</sub>]</code> of which the sum is greater than or equal to <code>target</code>. If there is no such subarray, return <code>0</code> instead.</p>
+
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+
+<pre><strong>Input:</strong> target = 7, nums = [2,3,1,2,4,3]
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> The subarray [4,3] has the minimal length under the problem constraint.
+</pre>
+
+<p><strong>Example 2:</strong></p>
+
+<pre><strong>Input:</strong> target = 4, nums = [1,4,4]
+<strong>Output:</strong> 1
+</pre>
+
+<p><strong>Example 3:</strong></p>
+
+<pre><strong>Input:</strong> target = 11, nums = [1,1,1,1,1,1,1,1]
+<strong>Output:</strong> 0
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= target &lt;= 10<sup>9</sup></code></li>
+	<li><code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code></li>
+</ul>
+
+<p>&nbsp;</p>
+<strong>Follow up:</strong> If you have figured out the <code>O(n)</code> solution, try coding another solution of which the time complexity is <code>O(n log(n))</code>.</div>
+
+<p>solution : use sliding window to slove this problem</p>
+
+```Java
+class Solution {
+    /*
+    maintain a sliding window [i, j] and record the sum of this interval
+    while (sum >= target):
+        update minLength
+        i++ (reduce the window length)
+    */
+    public int minSubArrayLen(int target, int[] nums) {
+        if (nums.length == 0) return 0;
+        int minLen = Integer.MAX_VALUE;
+        int i = 0;
+        int sum = 0;
+        for (int j = 0; j < nums.length; j++){
+            sum += nums[j];
+            while (sum >= target) {
+                minLen = Math.min(minLen, j - i + 1);
+                sum -= nums[i++];
+            }
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+}
+```
+
+<p><strong>TC : O(n) --> linear scan</strong></p>
+<p><strong>SC : O(1) const extra space</strong></p>
+
+&nbsp;
