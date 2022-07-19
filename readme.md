@@ -13,6 +13,10 @@
 [167. Two Sum II - Input Array Is Sorted](#167)
 
 [209. Minimum Size Subarray Sum](#209)
+
+[15. 3Sum](#15)
+
+[713. Subarray Product Less Than K](#713)
 &nbsp;
 
 # demo
@@ -21,7 +25,7 @@
 
 <!-- from here -->
 
-## 167. Two Sum II - Input Array Is Sorted <a id="167"></a>
+## 713. Subarray Product Less Than K <a id="713"></a>
 
 <p><strong>solution : </strong></p>
 
@@ -542,5 +546,146 @@ class Solution {
 
 <p><strong>TC : O(n) --> linear scan</strong></p>
 <p><strong>SC : O(1) const extra space</strong></p>
+
+&nbsp;
+
+## 15. 3Sum <a id="15"></a>
+
+<div class="notranslate"><p>Given an integer array nums, return all the triplets <code>[nums[i], nums[j], nums[k]]</code> such that <code>i != j</code>, <code>i != k</code>, and <code>j != k</code>, and <code>nums[i] + nums[j] + nums[k] == 0</code>.</p>
+
+<p>Notice that the solution set must not contain duplicate triplets.</p>
+
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+
+<pre><strong>Input:</strong> nums = [-1,0,1,2,-1,-4]
+<strong>Output:</strong> [[-1,-1,2],[-1,0,1]]
+<strong>Explanation:</strong> 
+nums[0] + nums[1] + nums[1] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.
+</pre>
+
+<p><strong>Example 2:</strong></p>
+
+<pre><strong>Input:</strong> nums = [0,1,1]
+<strong>Output:</strong> []
+<strong>Explanation:</strong> The only possible triplet does not sum up to 0.
+</pre>
+
+<p><strong>Example 3:</strong></p>
+
+<pre><strong>Input:</strong> nums = [0,0,0]
+<strong>Output:</strong> [[0,0,0]]
+<strong>Explanation:</strong> The only possible triplet sums up to 0.
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>3 &lt;= nums.length &lt;= 3000</code></li>
+	<li><code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
+</ul>
+</div>
+
+<p><strong>solution : since the TC is not O(n), to remove duplicate, we sort the array first, then we use two pointer to solve this problem.</strong></p>
+
+```Java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        if(nums.length < 3) return new ArrayList<>();
+        List<List<Integer>> lists = new ArrayList<>();
+        Arrays.sort(nums); // [-4,-1,-1,0,1,2]
+        for(int i = 0; i < nums.length - 2; i++){
+            if(nums[i] > 0) break; // 大于0，后续无解
+            if(i > 0 && nums[i] == nums[i - 1]) continue; // 跳过重复解
+            int l = i + 1, r = nums.length - 1;
+            while(l < r){
+                if(l > i + 1 && nums[l] == nums[l - 1]){ // 跳过重复解
+                    l++;
+                    continue;
+                }
+                int lrSum = nums[l] + nums[r];
+                if(lrSum == -nums[i]){ // 找到解，加入lists中，移动两个指针
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[i]);
+                    list.add(nums[l]);
+                    list.add(nums[r]);
+                    lists.add(list);
+                    l++;
+                    r--;
+                }
+                else if (lrSum < -nums[i])l++; // 小于目标，移动左指针
+                else r--; // 大于目标，移动右指针
+            }
+        }
+        return lists;
+    }
+}
+```
+
+<p><strong>TC : O(n^2) do n twoSum</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 713. Subarray Product Less Than K <a id="713"></a>
+
+<div class="notranslate"><p>Given an array of integers <code>nums</code> and an integer <code>k</code>, return <em>the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than </em><code>k</code>.</p>
+
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+
+<pre><strong>Input:</strong> nums = [10,5,2,6], k = 100
+<strong>Output:</strong> 8
+<strong>Explanation:</strong> The 8 subarrays that have product less than 100 are:
+[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+</pre>
+
+<p><strong>Example 2:</strong></p>
+
+<pre><strong>Input:</strong> nums = [1,2,3], k = 0
+<strong>Output:</strong> 0
+</pre>
+
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= nums.length &lt;= 3 * 10<sup>4</sup></code></li>
+	<li><code>1 &lt;= nums[i] &lt;= 1000</code></li>
+	<li><code>0 &lt;= k &lt;= 10<sup>6</sup></code></li>
+</ul>
+</div>
+
+<p><strong>solution : Sliding window</strong></p>
+<P><strong>trick : when product of interval [i, j] < k, add j - i + 1 to the result</strong></p>
+
+<img src = "./photo/713.png">
+
+```Java
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        int n = nums.length, ret = 0;
+        int prod = 1, i = 0;
+        for (int j = 0; j < n; j++) {
+            prod *= nums[j];
+            while (i <= j && prod >= k) {
+                prod /= nums[i];
+                i++;
+            }
+            ret += j - i + 1;
+        }
+        return ret;
+    }
+}
+```
+
+<p><strong>TC : O(n) n is the length of array.</strong></p>
+<p><strong>SC : O(1)</strong></p>
 
 &nbsp;
