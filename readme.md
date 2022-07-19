@@ -17,6 +17,9 @@
 [15. 3Sum](#15)
 
 [713. Subarray Product Less Than K](#713)
+
+[560. Subarray Sum Equals K](#560)
+
 &nbsp;
 
 # demo
@@ -25,9 +28,10 @@
 
 <!-- from here -->
 
-## 713. Subarray Product Less Than K <a id=""></a>
+## 560. Subarray Sum Equals K <a id=""></a>
 
-<p><strong>solution : </strong></p>
+<p>&nbsp;</p>
+<p><strong>Solution : </strong></p>
 
 ```Java
 
@@ -689,3 +693,79 @@ class Solution {
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
+
+## 560. Subarray Sum Equals K <a id="560"></a>
+
+<div class="notranslate"><p>Given an array of integers <code>nums</code> and an integer <code>k</code>, return <em>the total number of subarrays whose sum equals to</em> <code>k</code>.</p>
+    <p>A subarray is a contiguous <strong>non-empty</strong> sequence of elements within an array.</p>
+    <p>&nbsp;</p>
+    <p><strong>Example 1:</strong></p>
+    <pre><strong>Input:</strong> nums = [1,1,1], k = 2
+    <strong>Output:</strong> 2
+    </pre><p><strong>Example 2:</strong></p>
+    <pre><strong>Input:</strong> nums = [1,2,3], k = 3
+    <strong>Output:</strong> 2
+    </pre>
+    <p>&nbsp;</p>
+    <p><strong>Constraints:</strong></p>
+    <ul>
+        <li><code>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></code></li>
+        <li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
+        <li><code>-10<sup>7</sup> &lt;= k &lt;= 10<sup>7</sup></code></li>
+    </ul>
+</div>
+
+<p>&nbsp;</p>
+
+<p><strong>Solution1 : Enumerate, for each subarray end at j, go back to see if the sum of the subarray equals to k. TC O(n^3), if we use sum in each loop to record the sum of the subarray, we could do it in TC: O(n^2)</strong></p>
+<img src = "./photo/560.png">
+
+```Java
+public class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        for (int start = 0; start < nums.length; ++start) {
+            int sum = 0;
+            for (int end = start; end >= 0; --end) {
+                sum += nums[end];
+                if (sum == k) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
+```
+
+<p><strong>TC : O(n^2) --> Enumerate all combination</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+<p><strong>Solution2 : Use prefix sum + hashMap to solve this problem. The bottleneck of the first solution is it needs O(n) time to traverse from i back to 0 to see if there any match cases, but if we can find all match cases in O(1) time, we can reduce the TC to O(n).</strong></p>
+
+<p><strong>We use HashMap to record the prefix sum and the times of the prefix sum appears. From pre[i]−pre[j−1]==k --> we know that pre[j−1] == pre[i] − k. to check the times of pre[j-1]. we use map.get(pre[i] − k) to quickly find out the result. (it is more like use a map to record our moving status)</strong></p>
+<img src = "./photo/560_1.png">
+<img src = "./photo/560_2.png">
+
+```Java
+public class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0, pre = 0;
+        HashMap < Integer, Integer > mp = new HashMap < > ();
+        mp.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (mp.containsKey(pre - k)) {
+                count += mp.get(pre - k);
+            }
+            mp.put(pre, mp.getOrDefault(pre, 0) + 1);
+        }
+        return count;
+    }
+}
+```
+
+<p><strong>TC : O(n) --> O(1) to find the number of match cases</strong></p>
+<p><strong>SC : O(n) --> need record the prefix sum and appear times</strong></p>
