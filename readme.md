@@ -25,7 +25,7 @@
 
 <!-- from here -->
 
-## 713. Subarray Product Less Than K <a id="713"></a>
+## 713. Subarray Product Less Than K <a id=""></a>
 
 <p><strong>solution : </strong></p>
 
