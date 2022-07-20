@@ -20,6 +20,12 @@
 
 [560. Subarray Sum Equals K](#560)
 
+[525. Contiguous Array](#525)
+
+[724. Find Pivot Index](#724)
+
+[304. Range Sum Query 2D - Immutable](#304)
+
 &nbsp;
 
 # demo
@@ -28,7 +34,7 @@
 
 <!-- from here -->
 
-## 560. Subarray Sum Equals K <a id=""></a>
+## 304. Range Sum Query 2D - Immutable <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -769,3 +775,186 @@ public class Solution {
 
 <p><strong>TC : O(n) --> O(1) to find the number of match cases</strong></p>
 <p><strong>SC : O(n) --> need record the prefix sum and appear times</strong></p>
+
+## 525. Contiguous Array <a id="525"></a>
+
+<div class="notranslate"><p>Given a binary array <code>nums</code>, return <em>the maximum length of a contiguous subarray with an equal number of </em><code>0</code><em> and </em><code>1</code>.</p>
+    <p>&nbsp;</p>
+    <p><strong>Example 1:</strong></p>
+    <pre><strong>Input:</strong> nums = [0,1]
+    <strong>Output:</strong> 2
+    <strong>Explanation:</strong> [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
+    </pre>
+    <p><strong>Example 2:</strong></p>
+    <pre><strong>Input:</strong> nums = [0,1,0]
+    <strong>Output:</strong> 2
+    <strong>Explanation:</strong> [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+    </pre>
+    <p>&nbsp;</p>
+    <p><strong>Constraints:</strong></p>
+    <ul>
+        <li><code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
+        <li><code>nums[i]</code> is either <code>0</code> or <code>1</code>.</li>
+    </ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use prefix sum and hashMap to solve this problem (almost same with the 560). When we calculate the prefix sum, if we meet 0, we can add -1. Use hashMap to record the sum and the first current index. when the sum can be found in map, it means the sum from [map.get(sum) to current index] is 0, update the result.</strong></p>
+
+<img src = "./photo/525.png">
+
+```Java
+class Solution {
+    public int findMaxLength(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        int sum = 0;
+        int globalMax = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += (nums[i] == 1 ? 1 : -1);
+            if (map.containsKey(sum)) {
+                globalMax = Math.max(globalMax, i - map.get(sum));
+            } else {
+                map.put(sum, i);
+            }
+        }
+        return globalMax;
+    }
+}
+```
+
+<p><strong>TC : O(n) --> O(1) to get the length</strong></p>
+<p><strong>SC : O(n) --> use O(n) hashMap</strong></p>
+
+&nbsp;
+
+## 724. Find Pivot Index <a id="724"></a>
+
+<div class="notranslate"><p>Given an array of integers <code>nums</code>, calculate the <strong>pivot index</strong> of this array.</p>
+<p>The <strong>pivot index</strong> is the index where the sum of all the numbers <strong>strictly</strong> to the left of the index is equal to the sum of all the numbers <strong>strictly</strong> to the index's right.</p>
+<p>If the index is on the left edge of the array, then the left sum is <code>0</code> because there are no elements to the left. This also applies to the right edge of the array.</p>
+<p>Return <em>the <strong>leftmost pivot index</strong></em>. If no such index exists, return -1.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> nums = [1,7,3,6,5,6]
+<strong>Output:</strong> 3
+<strong>Explanation:</strong>
+The pivot index is 3.
+Left sum = nums[0] + nums[1] + nums[2] = 1 + 7 + 3 = 11
+Right sum = nums[4] + nums[5] = 5 + 6 = 11
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> nums = [1,2,3]
+<strong>Output:</strong> -1
+<strong>Explanation:</strong>
+There is no index that satisfies the conditions in the problem statement.</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> nums = [2,1,-1]
+<strong>Output:</strong> 0
+<strong>Explanation:</strong>
+The pivot index is 0.
+Left sum = 0 (no elements to the left of index 0)
+Right sum = nums[1] + nums[2] = 1 + -1 = 0
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Note:</strong> This question is the same as&nbsp;1991:&nbsp;<a href="https://leetcode.com/problems/find-the-middle-index-in-array/">https://leetcode.com/problems/find-the-middle-index-in-array/</a></p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use O(n) space to record prefix sum. Better solution : since left + right + nums[i] == total and left == right; that is 2 * left + nums[i] = total, we don't need to record all prefix sum</strong></p>
+
+```Java
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int total = Arrays.stream(nums).sum();
+        int sum = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (2 * sum + nums[i] == total) {
+                return i;
+            }
+            sum += nums[i];
+        }
+        return -1;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 304. Range Sum Query 2D - Immutable <a id="304"></a>
+
+<div class="notranslate"><p>Given a 2D matrix <code>matrix</code>, handle multiple queries of the following type:</p>
+<ul>
+	<li>Calculate the <strong>sum</strong> of the elements of <code>matrix</code> inside the rectangle defined by its <strong>upper left corner</strong> <code>(row1, col1)</code> and <strong>lower right corner</strong> <code>(row2, col2)</code>.</li>
+</ul>
+<p>Implement the <code>NumMatrix</code> class:</p>
+<ul>
+	<li><code>NumMatrix(int[][] matrix)</code> Initializes the object with the integer matrix <code>matrix</code>.</li>
+	<li><code>int sumRegion(int row1, int col1, int row2, int col2)</code> Returns the <strong>sum</strong> of the elements of <code>matrix</code> inside the rectangle defined by its <strong>upper left corner</strong> <code>(row1, col1)</code> and <strong>lower right corner</strong> <code>(row2, col2)</code>.</li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 415px; height: 415px;" src="https://assets.leetcode.com/uploads/2021/03/14/sum-grid.jpg" alt="">
+<pre><strong>Input</strong>
+["NumMatrix", "sumRegion", "sumRegion", "sumRegion"]
+[[[[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1, 0, 1, 7], [1, 0, 3, 0, 5]]], [2, 1, 4, 3], [1, 1, 2, 2], [1, 2, 2, 4]]
+<strong>Output</strong>
+[null, 8, 11, 12]
+<strong>Explanation</strong>
+NumMatrix numMatrix = new NumMatrix([[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1, 0, 1, 7], [1, 0, 3, 0, 5]]);
+numMatrix.sumRegion(2, 1, 4, 3); // return 8 (i.e sum of the red rectangle)
+numMatrix.sumRegion(1, 1, 2, 2); // return 11 (i.e sum of the green rectangle)
+numMatrix.sumRegion(1, 2, 2, 4); // return 12 (i.e sum of the blue rectangle)
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>m == matrix.length</code></li>
+	<li><code>n == matrix[i].length</code></li>
+	<li><code>1 &lt;= m, n &lt;= 200</code></li>
+	<li><code>-10<sup>4</sup> &lt;= matrix[i][j] &lt;= 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= row1 &lt;= row2 &lt; m</code></li>
+	<li><code>0 &lt;= col1 &lt;= col2 &lt; n</code></li>
+	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>sumRegion</code>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use one-dimension prefix sum(O(min(m,n)) get sum or two-dimension prefix sum (O(1) get sum)</strong></p>
+
+```Java
+class NumMatrix {
+    int[][] sums;
+
+    public NumMatrix(int[][] matrix) {
+        int m = matrix.length;
+        if (m > 0) {
+            int n = matrix[0].length;
+            sums = new int[m + 1][n + 1];
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    sums[i + 1][j + 1] = sums[i][j + 1] + sums[i + 1][j] - sums[i][j] + matrix[i][j];
+                }
+            }
+        }
+    }
+
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        return sums[row2 + 1][col2 + 1] - sums[row1][col2 + 1] - sums[row2 + 1][col1] + sums[row1][col1];
+    }
+}
+```
+
+<p><strong>TC : O(mn) m for row, n for col</strong></p>
+<p><strong>SC : O(mn) for prefix array mn</strong></p>
+
+&nbsp;
