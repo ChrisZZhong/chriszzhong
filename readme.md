@@ -26,7 +26,14 @@
 
 [304. Range Sum Query 2D - Immutable](#304)
 
+[567. Permutation in String](#567)
+
+[3. Longest Substring Without Repeating Characters](#3)
 &nbsp;
+
+# categories
+
+## sliding window
 
 # demo
 
@@ -34,7 +41,7 @@
 
 <!-- from here -->
 
-## 304. Range Sum Query 2D - Immutable <a id=""></a>
+## 3. Longest Substring Without Repeating Characters <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -956,5 +963,132 @@ class NumMatrix {
 
 <p><strong>TC : O(mn) m for row, n for col</strong></p>
 <p><strong>SC : O(mn) for prefix array mn</strong></p>
+
+&nbsp;
+
+## 567. Permutation in String <a id=""></a>
+
+<div class="notranslate"><p>Given two strings <code>s1</code> and <code>s2</code>, return <code>true</code><em> if </em><code>s2</code><em> contains a permutation of </em><code>s1</code><em>, or </em><code>false</code><em> otherwise</em>.</p>
+<p>In other words, return <code>true</code> if one of <code>s1</code>'s permutations is the substring of <code>s2</code>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> s1 = "ab", s2 = "eidbaooo"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> s2 contains one permutation of s1 ("ba").
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> s1 = "ab", s2 = "eidboaoo"
+<strong>Output:</strong> false
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= s1.length, s2.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>s1</code> and <code>s2</code> consist of lowercase English letters.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use silding window (a map or an array to record the current different character)</strong></p>
+
+```Java
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        Map<Character, Integer> map = new HashMap<>();
+        // initialize
+        for (char ch : s1.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+        //
+        int i = 0;
+        int j = 0;
+        while (j < s2.length()) {
+            // for those characters not in the s1, ignore them to improve the compare time
+            if (map.containsKey(s2.charAt(j))) {
+                map.put(s2.charAt(j), map.get(s2.charAt(j)) - 1);
+            }
+            if (j < i + s1.length() - 1) {
+                j++;
+                continue;
+            }
+            // check
+            if (contains(map)) return true;
+            // i++
+            if (map.containsKey(s2.charAt(i))) {
+                map.put(s2.charAt(i), map.get(s2.charAt(i)) + 1);
+            }
+            i++;
+            j++;
+        }
+        return false;
+    }
+    private boolean contains(Map<Character, Integer> map) {
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() != 0) return false;
+        }
+        return true;
+    }
+}
+```
+
+<p><strong>TC : O(m + n) --> </strong></p>
+<p><strong>SC : O(m)</strong></p>
+
+&nbsp;
+
+## 3. Longest Substring Without Repeating Characters <a id="3"></a>
+
+<div class="notranslate"><p>Given a string <code>s</code>, find the length of the <strong>longest substring</strong> without repeating characters.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "abcabcbb"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The answer is "abc", with the length of 3.
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "bbbbb"
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> The answer is "b", with the length of 1.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> s = "pwwkew"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>0 &lt;= s.length &lt;= 5 * 10<sup>4</sup></code></li>
+	<li><code>s</code> consists of English letters, digits, symbols and spaces.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : sliding window (this way like a monotonic stack)</strong></p>
+
+```Java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int res = 0;
+        Set<Character> set = new HashSet<>();
+        int i = 0;
+        int j = 0;
+        while (j < s.length()) {
+            while (set.contains(s.charAt(j))) {
+                set.remove(s.charAt(i));
+                i++;
+            }
+            set.add(s.charAt(j));
+            res = Math.max(res, set.size());
+            j++;
+        }
+        return res;
+    }
+}
+```
+
+<p><strong>TC : O(n) --> </strong></p>
+<p><strong>SC : O(1)  --> max all ascii number 128</strong></p>
 
 &nbsp;
