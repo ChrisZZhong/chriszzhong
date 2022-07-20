@@ -33,7 +33,43 @@
 
 # categories
 
-## sliding window
+## Sliding Window
+
+[567. Permutation in String](#567)
+
+[209. Minimum Size Subarray Sum](#209)
+
+[713. Subarray Product Less Than K](#713)
+
+[3. Longest Substring Without Repeating Characters](#3)
+
+## Bit Operation
+
+[29. Divide Two Integers](#29)
+
+[67. Add Binary](#67)
+
+[338. Counting Bits](#338)
+
+[137. Single Number II](#137)
+
+[318. Maximum Product of Word Lengths](#318)
+
+## Two pointer
+
+[167. Two Sum II - Input Array Is Sorted](#167)
+
+[15. 3Sum](#15)
+
+## Prefix sum
+
+[560. Subarray Sum Equals K](#560)
+
+[525. Contiguous Array](#525)
+
+[724. Find Pivot Index](#724)
+
+[304. Range Sum Query 2D - Immutable](#304)
 
 # demo
 
@@ -966,7 +1002,7 @@ class NumMatrix {
 
 &nbsp;
 
-## 567. Permutation in String <a id=""></a>
+## 567. Permutation in String <a id="567"></a>
 
 <div class="notranslate"><p>Given two strings <code>s1</code> and <code>s2</code>, return <code>true</code><em> if </em><code>s2</code><em> contains a permutation of </em><code>s1</code><em>, or </em><code>false</code><em> otherwise</em>.</p>
 <p>In other words, return <code>true</code> if one of <code>s1</code>'s permutations is the substring of <code>s2</code>.</p>
