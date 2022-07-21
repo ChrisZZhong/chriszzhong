@@ -29,6 +29,11 @@
 [567. Permutation in String](#567)
 
 [3. Longest Substring Without Repeating Characters](#3)
+
+[125. Valid Palindrome](#125)
+
+[647. Palindromic Substrings](#647)
+
 &nbsp;
 
 # categories
@@ -61,6 +66,8 @@
 
 [15. 3Sum](#15)
 
+[125. Valid Palindrome](#125)
+
 ## Prefix sum
 
 [560. Subarray Sum Equals K](#560)
@@ -71,13 +78,17 @@
 
 [304. Range Sum Query 2D - Immutable](#304)
 
+## center expension
+
+[647. Palindromic Substrings](#647)
+
 # demo
 
 &nbsp;
 
 <!-- from here -->
 
-## 3. Longest Substring Without Repeating Characters <a id=""></a>
+## 647. Palindromic Substrings <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -86,7 +97,7 @@
 
 ```
 
-<p><strong>TC : O(1) --> Max 32 bit</strong></p>
+<p><strong>TC : O(1)</strong></p>
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
@@ -1126,5 +1137,115 @@ class Solution {
 
 <p><strong>TC : O(n) --> </strong></p>
 <p><strong>SC : O(1)  --> max all ascii number 128</strong></p>
+
+&nbsp;
+
+## 125. Valid Palindrome <a id="125"></a>
+
+<p><strong>New API: Charater.isLetterOrDigit(char ch). Charater.toLowerCase(char ch)</strong></p>
+
+<div class="notranslate"><p>A phrase is a <strong>palindrome</strong> if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.</p>
+<p>Given a string <code>s</code>, return <code>true</code><em> if it is a <strong>palindrome</strong>, or </em><code>false</code><em> otherwise</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "A man, a plan, a canal: Panama"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> "amanaplanacanalpanama" is a palindrome.
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "race a car"
+<strong>Output:</strong> false
+<strong>Explanation:</strong> "raceacar" is not a palindrome.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> s = " "
+<strong>Output:</strong> true
+<strong>Explanation:</strong> s is an empty string "" after removing non-alphanumeric characters.
+Since an empty string reads the same forward and backward, it is a palindrome.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= s.length &lt;= 2 * 10<sup>5</sup></code></li>
+	<li><code>s</code> consists only of printable ASCII characters.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use two pointer to solve this problem</strong></p>
+
+```Java
+class Solution {
+    public boolean isPalindrome(String s) {
+        char[] input = s.toCharArray();
+        int i = 0;
+        int j = input.length - 1;
+        while (i < j) {
+            while (i < j && !Character.isLetterOrDigit(input[i])) {
+                i++;
+            }
+            while (i < j && !Character.isLetterOrDigit(input[j])) {
+                j--;
+            }
+            if (Character.toLowerCase(input[i++]) != Character.toLowerCase(input[j--]) ) return false;
+        }
+        return true;
+    }
+}
+```
+
+<p><strong>TC : O(n) --> n is the length of String s</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 647. Palindromic Substrings <a id="647"></a>
+
+<div class="notranslate"><p>Given a string <code>s</code>, return <em>the number of <strong>palindromic substrings</strong> in it</em>.</p>
+<p>A string is a <strong>palindrome</strong> when it reads the same backward as forward.</p>
+<p>A <strong>substring</strong> is a contiguous sequence of characters within the string.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "abc"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> Three palindromic strings: "a", "b", "c".
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "aaa"
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= s.length &lt;= 1000</code></li>
+	<li><code>s</code> consists of lowercase English letters.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Center expension. If we use two forloop and check from i to j whether it is palindrome, it will take O(n^3), use center expension only take O(n^2)</strong></p>
+
+<img src = "./photo/647.png">
+
+```Java
+class Solution {
+    public int countSubstrings(String s) {
+        int n = s.length(), ans = 0;
+        for (int i = 0; i < 2 * n - 1; ++i) {
+            int l = i / 2, r = i - l;
+            while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)) {
+                --l;
+                ++r;
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n^2)</strong></p>
+<p><strong>SC : O(1)</strong></p>
 
 &nbsp;
