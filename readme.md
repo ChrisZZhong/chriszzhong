@@ -34,6 +34,8 @@
 
 [647. Palindromic Substrings](#647)
 
+[680. Valid Palindrome II](#680)
+
 &nbsp;
 
 # categories
@@ -68,6 +70,8 @@
 
 [125. Valid Palindrome](#125)
 
+[680. Valid Palindrome II](#680)
+
 ## Prefix sum
 
 [560. Subarray Sum Equals K](#560)
@@ -88,7 +92,7 @@
 
 <!-- from here -->
 
-## 647. Palindromic Substrings <a id=""></a>
+## 680. Valid Palindrome II <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -294,7 +298,7 @@ TODO
 
 <!-- solu 1 -->
 
-## solution1 : Brian Kernighan x=x & (x−1) to set last 1 to 0
+<p><strong>solution1 : Brian Kernighan x=x & (x−1) to set last 1 to 0</strong></p>
 
 <p>Repeat until X == 0</p>
 
@@ -324,7 +328,7 @@ class Solution {
 
 <!-- solu 2 -->
 
-## solution2 : Dynamic programming
+<p><strong>solution2 : Dynamic programming</strong></p>
 
 <p><strong>y is 2^n when y & (y - 1) = 0</strong></p>
 <p><strong>bits[i] = bits[i - highBit] + 1;</strong></p>
@@ -1246,6 +1250,57 @@ class Solution {
 ```
 
 <p><strong>TC : O(n^2)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 680. Valid Palindrome II <a id="680"></a>
+
+<div class="notranslate"><p>Given a string <code>s</code>, return <code>true</code> <em>if the </em><code>s</code><em> can be palindrome after deleting <strong>at most one</strong> character from it</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "aba"
+<strong>Output:</strong> true
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "abca"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> You could delete the character 'c'.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> s = "abc"
+<strong>Output:</strong> false
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= s.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>s</code> consists of lowercase English letters.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Use two pointer to solve this problem</strong></p>
+
+```Java
+class Solution {
+    public boolean validPalindrome(String s) {
+        for (int i = 0, j = s.length() - 1; i < j; i++, j--) {
+            // since we can jump one character, we have two choice, left or right, we need check them both and return the or result.
+            if (s.charAt(i) != s.charAt(j)) return isPalindrome(s, i + 1, j) || isPalindrome(s, i, j - 1);
+        }
+        return true;
+    }
+    private boolean isPalindrome(String s, int i, int j) {
+        while (i < j) {
+            if (s.charAt(i++) != s.charAt(j--)) return false;
+        }
+        return true;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
