@@ -41,6 +41,11 @@
 [142. Linked List Cycle II](#142)
 
 [160. Intersection of Two Linked Lists](#160)
+
+[206. Reverse Linked List](#206)
+
+[445. Add Two Numbers II](#445)
+
 &nbsp;
 
 # categories
@@ -95,13 +100,33 @@
 
 [647. Palindromic Substrings](#647)
 
+## recursion
+
+[206. Reverse Linked List](#206)
+
+## iteration
+
+[206. Reverse Linked List](#206)
+
+## Linked List
+
+[19. Remove Nth Node From End of List](#19)
+
+[142. Linked List Cycle II](#142)
+
+[160. Intersection of Two Linked Lists](#160)
+
+[206. Reverse Linked List](#206)
+
+[445. Add Two Numbers II](#445)
+
 # demo
 
 &nbsp;
 
 <!-- from here -->
 
-## 160. Intersection of Two Linked Lists <a id=""></a>
+## 445. Add Two Numbers II <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -1616,5 +1641,199 @@ public class Solution {
 
 <p><strong>TC : O(n + m)</strong></p>
 <p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 206. Reverse Linked List <a id="206"></a>
+
+<div class="notranslate"><p>Given the <code>head</code> of a singly linked list, reverse the list, and return <em>the reversed list</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 542px; height: 222px;" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2,3,4,5]
+<strong>Output:</strong> [5,4,3,2,1]
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="width: 182px; height: 222px;" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2]
+<strong>Output:</strong> [2,1]
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> head = []
+<strong>Output:</strong> []
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the list is the range <code>[0, 5000]</code>.</li>
+	<li><code>-5000 &lt;= Node.val &lt;= 5000</code></li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : Iteration</strong></p>
+
+```
+prev = null;
+1 -> 2 -> 3 -> 4 -> 5
+
+null <- 1        2 -> 3 -> 4 -> 5
+prev    c        n
+
+null <- 1 <- 2   3 -> 4 -> 5
+       prev  c   n
+```
+
+```Java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null) return head;
+        ListNode prev = null;
+        ListNode next = null;
+        ListNode cur = head;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+<p>&nbsp;</p>
+<p><strong>Solution2 : recursive</strong></p>
+
+```Java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        // base case
+        if (head == null || head.next == null) return head;
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(n)  heap is O(1) + call stack is O(n)</strong></p>
+
+&nbsp;
+
+## 445. Add Two Numbers II <a id="445"></a>
+
+<div class="notranslate"><p>You are given two <strong>non-empty</strong> linked lists representing two non-negative integers. The most significant digit comes first and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.</p>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 523px; height: 342px;" src="https://assets.leetcode.com/uploads/2021/04/09/sumii-linked-list.jpg" alt="">
+<pre><strong>Input:</strong> l1 = [7,2,4,3], l2 = [5,6,4]
+<strong>Output:</strong> [7,8,0,7]
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> l1 = [2,4,3], l2 = [5,6,4]
+<strong>Output:</strong> [8,0,7]
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> l1 = [0], l2 = [0]
+<strong>Output:</strong> [0]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in each linked list is in the range <code>[1, 100]</code>.</li>
+	<li><code>0 &lt;= Node.val &lt;= 9</code></li>
+	<li>It is guaranteed that the list represents a number that does not have leading zeros.</li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong>&nbsp;Could you solve it without reversing the input lists?</p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : it's more like the merge two linked list</strong></p>
+
+```Java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        l1 = reverse(l1);
+        l2 = reverse(l2);
+        int carry = 0;
+        ListNode newHead = new ListNode(0);
+        ListNode cur = newHead;
+        while (l1 != null || l2 != null) {
+            int sum = carry;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            carry = sum / 10;
+            cur.next = new ListNode(sum % 10);
+            cur = cur.next;
+        }
+        if (carry != 0) {
+            cur.next = new ListNode(1);
+        }
+        return reverse(newHead.next);
+    }
+    private ListNode reverse(ListNode l1) {
+        ListNode prev = null;
+        ListNode next = null;
+        while (l1 != null) {
+            next = l1.next;
+            l1.next = prev;
+            prev = l1;
+            l1 = next;
+        }
+        return prev;
+    }
+}
+```
+
+<p>Also could use stack to replace the reverse operation</p>
+
+```Java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        Deque<Integer> stack1 = new ArrayDeque<Integer>();
+        Deque<Integer> stack2 = new ArrayDeque<Integer>();
+        while (l1 != null) {
+            stack1.push(l1.val);
+            l1 = l1.next;
+        }
+        while (l2 != null) {
+            stack2.push(l2.val);
+            l2 = l2.next;
+        }
+        int carry = 0;
+        ListNode ans = null;
+        while (!stack1.isEmpty() || !stack2.isEmpty() || carry != 0) {
+            int a = stack1.isEmpty() ? 0 : stack1.pop();
+            int b = stack2.isEmpty() ? 0 : stack2.pop();
+            int cur = a + b + carry;
+            carry = cur / 10;
+            cur %= 10;
+            ListNode curnode = new ListNode(cur);
+            curnode.next = ans;
+            ans = curnode;
+        }
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n + m)</strong></p>
+<p><strong>SC : O(m + n) stack, if use reverse SC is O(1)</strong></p>
 
 &nbsp;
