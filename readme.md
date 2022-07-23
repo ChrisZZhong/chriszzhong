@@ -36,6 +36,11 @@
 
 [680. Valid Palindrome II](#680)
 
+[19. Remove Nth Node From End of List](#19)
+
+[142. Linked List Cycle II](#142)
+
+[160. Intersection of Two Linked Lists](#160)
 &nbsp;
 
 # categories
@@ -72,6 +77,10 @@
 
 [680. Valid Palindrome II](#680)
 
+[19. Remove Nth Node From End of List](#19)
+
+[142. Linked List Cycle II](#142)
+
 ## Prefix sum
 
 [560. Subarray Sum Equals K](#560)
@@ -92,7 +101,7 @@
 
 <!-- from here -->
 
-## 680. Valid Palindrome II <a id=""></a>
+## 160. Intersection of Two Linked Lists <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -1301,6 +1310,311 @@ class Solution {
 ```
 
 <p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 19. Remove Nth Node From End of List <a id="19"></a>
+
+<div class="notranslate"><p>Given the <code>head</code> of a linked list, remove the <code>n<sup>th</sup></code> node from the end of the list and return its head.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 542px; height: 222px;" src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2,3,4,5], n = 2
+<strong>Output:</strong> [1,2,3,5]
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> head = [1], n = 1
+<strong>Output:</strong> []
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> head = [1,2], n = 1
+<strong>Output:</strong> [1]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the list is <code>sz</code>.</li>
+	<li><code>1 &lt;= sz &lt;= 30</code></li>
+	<li><code>0 &lt;= Node.val &lt;= 100</code></li>
+	<li><code>1 &lt;= n &lt;= sz</code></li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> Could you do this in one pass?</p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : get the length of linked list first and remove</strong></p>
+
+```Java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = dummy;
+        int counter = 0;
+        ListNode lenNode = head;
+        int len = getLength(lenNode);
+        while (cur != null) {
+            if (counter == len - n) {
+                cur.next = cur.next.next;
+                break;
+            }
+            cur = cur.next;
+            counter++;
+
+        }
+        return dummy.next;
+    }
+    private int getLength(ListNode head) {
+        int len = 0;
+        while (head != null) {
+            len++;
+            head = head.next;
+        }
+        return len;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+<p>&nbsp;</p>
+<p><strong>Solution2 : two pointer, keep a distance n between P1 and P2, when P2 goes to the end, p1 is the node we wanna remove.</strong></p>
+
+<img src = "https://assets.leetcode-cn.com/solution-static/19/p3.png">
+
+```Java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode first = head;
+        ListNode second = dummy;
+        for (int i = 0; i < n; ++i) {
+            first = first.next;
+        }
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        ListNode ans = dummy.next;
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 142. Linked List Cycle II <a id="142"></a>
+
+<div class="notranslate"><p>Given the <code>head</code> of a linked list, return <em>the node where the cycle begins. If there is no cycle, return </em><code>null</code>.</p>
+<p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the <code>next</code> pointer. Internally, <code>pos</code> is used to denote the index of the node that tail's <code>next</code> pointer is connected to (<strong>0-indexed</strong>). It is <code>-1</code> if there is no cycle. <strong>Note that</strong> <code>pos</code> <strong>is not passed as a parameter</strong>.</p>
+<p><strong>Do not modify</strong> the linked list.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="height: 145px; width: 450px;" src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png" alt="">
+<pre><strong>Input:</strong> head = [3,2,0,-4], pos = 1
+<strong>Output:</strong> tail connects to node index 1
+<strong>Explanation:</strong> There is a cycle in the linked list, where tail connects to the second node.
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="height: 105px; width: 201px;" src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test2.png" alt="">
+<pre><strong>Input:</strong> head = [1,2], pos = 0
+<strong>Output:</strong> tail connects to node index 0
+<strong>Explanation:</strong> There is a cycle in the linked list, where tail connects to the first node.
+</pre>
+<p><strong>Example 3:</strong></p>
+<img style="height: 65px; width: 65px;" src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test3.png" alt="">
+<pre><strong>Input:</strong> head = [1], pos = -1
+<strong>Output:</strong> no cycle
+<strong>Explanation:</strong> There is no cycle in the linked list.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of the nodes in the list is in the range <code>[0, 10<sup>4</sup>]</code>.</li>
+	<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
+	<li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Easy way to do is HashSet, record all visited node but that needs SC O(n). We use two pointer(slow and fast) instead.</strong></p>
+
+<img src = "https://assets.leetcode-cn.com/solution-static/jianzhi_II_022/jianzhi_II_022_fig1.png">
+
+<p><strong>1. initialize fast and slow pointer, the fast pointer move two step each time and slow pointer move one step each time.</strong></p>
+
+<p><strong>2. two pointers both start from head, if there is a circle, they will always meet again.</strong></p>
+
+<p><strong>3. Details</strong></p>
+
+```
+    - suppose fast moves 2k steps and slow moves k steps.
+    - There are a nodes from head to the entry of the circle.
+    - When two pointers meet in the circle, slow moves b nodes from the entry node. and the left nodes of the circle is c. suppose circle has T = (b + c) nodes.
+    1. Now we have:
+        1) k - a = b
+        2) 2k - a = nT + b
+    2. use 2) minue 1) we get:
+        3) k = nT = (n - 1) * T + b + c
+    3. use 3) minus 1) we have:
+        4) a = (n - 1)T + c
+    4. now we have a % T = c, we reset the fast to head. when fast move (n - 1) * T + c, we find the slow pointer will also move to the entry.
+    5. The stop case is slow == fast, return slow/fast
+```
+
+<p><strong></strong></p>
+
+```Java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null) return null; // corner case
+        ListNode fast = head, slow = head;
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(slow == fast) break; // meet
+        }
+        if(slow != fast) return null; // if there is no circle return null. without whis condition, fast will NPE.
+        fast = head; // reset fast to head;
+        while(slow != fast){
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow; // return fast both works
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1) --> only three pointer</strong></p>
+
+&nbsp;
+
+## 160. Intersection of Two Linked Lists <a id="160"></a>
+
+<div class="notranslate"><p>Given the heads of two singly linked-lists <code>headA</code> and <code>headB</code>, return <em>the node at which the two lists intersect</em>. If the two linked lists have no intersection at all, return <code>null</code>.</p>
+<p>For example, the following two linked lists begin to intersect at node <code>c1</code>:</p>
+<img style="width: 500px; height: 162px;" src="https://assets.leetcode.com/uploads/2021/03/05/160_statement.png" alt="">
+<p>The test cases are generated such that there are no cycles anywhere in the entire linked structure.</p>
+<p><strong>Note</strong> that the linked lists must <strong>retain their original structure</strong> after the function returns.</p>
+<p><strong>Custom Judge:</strong></p>
+<p>The inputs to the <strong>judge</strong> are given as follows (your program is <strong>not</strong> given these inputs):</p>
+<ul>
+	<li><code>intersectVal</code> - The value of the node where the intersection occurs. This is <code>0</code> if there is no intersected node.</li>
+	<li><code>listA</code> - The first linked list.</li>
+	<li><code>listB</code> - The second linked list.</li>
+	<li><code>skipA</code> - The number of nodes to skip ahead in <code>listA</code> (starting from the head) to get to the intersected node.</li>
+	<li><code>skipB</code> - The number of nodes to skip ahead in <code>listB</code> (starting from the head) to get to the intersected node.</li>
+</ul>
+<p>The judge will then create the linked structure based on these inputs and pass the two heads, <code>headA</code> and <code>headB</code>&nbsp;to your program. If you correctly return the intersected node, then your solution will be <strong>accepted</strong>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 500px; height: 162px;" src="https://assets.leetcode.com/uploads/2021/03/05/160_example_1_1.png" alt="">
+<pre><strong>Input:</strong> intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+<strong>Output:</strong> Intersected at '8'
+<strong>Explanation:</strong> The intersected node's value is 8 (note that this must not be 0 if the two lists intersect).
+From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="width: 500px; height: 194px;" src="https://assets.leetcode.com/uploads/2021/03/05/160_example_2.png" alt="">
+<pre><strong>Input:</strong> intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+<strong>Output:</strong> Intersected at '2'
+<strong>Explanation:</strong> The intersected node's value is 2 (note that this must not be 0 if the two lists intersect).
+From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before the intersected node in A; There are 1 node before the intersected node in B.
+</pre>
+<p><strong>Example 3:</strong></p>
+<img style="width: 300px; height: 189px;" src="https://assets.leetcode.com/uploads/2021/03/05/160_example_3.png" alt="">
+<pre><strong>Input:</strong> intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+<strong>Output:</strong> No intersection
+<strong>Explanation:</strong> From the head of A, it reads as [2,6,4]. From the head of B, it reads as [1,5]. Since the two lists do not intersect, intersectVal must be 0, while skipA and skipB can be arbitrary values.
+Explanation: The two lists do not intersect, so return null.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes of <code>listA</code> is in the <code>m</code>.</li>
+	<li>The number of nodes of <code>listB</code> is in the <code>n</code>.</li>
+	<li><code>1 &lt;= m, n &lt;= 3 * 10<sup>4</sup></code></li>
+	<li><code>1 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
+	<li><code>0 &lt;= skipA &lt;&nbsp;m</code></li>
+	<li><code>0 &lt;= skipB &lt;&nbsp;n</code></li>
+	<li><code>intersectVal</code> is <code>0</code> if <code>listA</code> and <code>listB</code> do not intersect.</li>
+	<li><code>intersectVal == listA[skipA] == listB[skipB]</code> if <code>listA</code> and <code>listB</code> intersect.</li>
+</ul>
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Could you write a solution that runs in <code>O(m + n)</code> time and use only <code>O(1)</code> memory?</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : two pointer</strong></p>
+
+```
+方法：双指针
+思路和算法
+
+使用双指针的方法，可以将空间复杂度降至 O(1)O(1)。
+
+只有当链表 headA 和 headB 都不为空时，两个链表才可能相交。因此首先判断链表 headA 和 headB 是否为空，如果其中至少有一个链表为空，则两个链表一定不相交，返回 null。
+
+当链表 headA 和 headB 都不为空时，创建两个指针 pA 和 pB，初始时分别指向两个链表的头节点 headA 和 headB，然后将两个指针依次遍历两个链表的每个节点。具体做法如下：
+
+每步操作需要同时更新指针 pA 和 pB。
+
+如果指针 pA 不为空，则将指针 pA 移到下一个节点；如果指针 pB 不为空，则将指针 pB 移到下一个节点。
+
+如果指针 pA 为空，则将指针 pA 移到链表 headB 的头节点；如果指针 pB 为空，则将指针 pB 移到链表 headA 的头节点。
+
+当指针 pA 和 pB 指向同一个节点或者都为空时，返回它们指向的节点或者 null。
+
+证明:
+
+下面提供双指针方法的正确性证明。考虑两种情况，第一种情况是两个链表相交，第二种情况是两个链表不相交。
+
+情况一：两个链表相交
+
+链表 headA 和 headB 的长度分别是 mm 和 nn。假设链表 headA 的不相交部分有 aa 个节点，链表 headB 的不相交部分有 bb 个节点，两个链表相交的部分有 cc 个节点，则有 a+c=ma+c=m，b+c=nb+c=n。
+
+如果 a=b，则两个指针会同时到达两个链表相交的节点，此时返回相交的节点；
+
+如果 a != b 则指针 pA 会遍历完链表 headA，指针 pB 会遍历完链表 headB，两个指针不会同时到达链表的尾节点，然后指针 pA 移到链表 headB 的头节点，指针 pB 移到链表 headA 的头节点，然后两个指针继续移动，在指针 pA 移动了 a+c+ba+c+b 次、指针 pB 移动了 b+c+ab+c+a 次之后，两个指针会同时到达两个链表相交的节点，该节点也是两个指针第一次同时指向的节点，此时返回相交的节点。
+
+情况二：两个链表不相交
+
+链表 headA 和 headB 的长度分别是 mm 和 nn。考虑当 m=nm=n 和 m \ne nm
+
+
+ =n 时，两个指针分别会如何移动：
+
+如果 m = n，则两个指针会同时到达两个链表的尾节点，然后同时变成空值 null，此时返回 null；
+
+如果 m != n 则由于两个链表没有公共节点，两个指针也不会同时到达两个链表的尾节点，因此两个指针都会遍历完两个链表，在指针 pA 移动了 m+nm+n 次、指针 pB 移动了 n+mn+m 次之后，两个指针会同时变成空值 null，此时返回 null。
+```
+
+```Java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
+    }
+}
+```
+
+<p><strong>TC : O(n + m)</strong></p>
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
