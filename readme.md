@@ -2308,7 +2308,7 @@ class Solution {
 }
 ```
 
-<p><strong>TC : O(1)</strong></p>
+<p><strong>TC : O(n)</strong></p>
 <p><strong>SC : O(1)</strong></p>
 
 &nbsp;
