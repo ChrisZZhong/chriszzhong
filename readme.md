@@ -46,6 +46,12 @@
 
 [445. Add Two Numbers II](#445)
 
+[234. Palindrome Linked List](#234)
+
+[430. Flatten a Multilevel Doubly Linked List](#430)
+
+[708. Insert into a Sorted Circular Linked List](#708)
+
 &nbsp;
 
 # categories
@@ -104,9 +110,15 @@
 
 [206. Reverse Linked List](#206)
 
+[234. Palindrome Linked List](#234)
+
+[430. Flatten a Multilevel Doubly Linked List](#430)
+
 ## iteration
 
 [206. Reverse Linked List](#206)
+
+[708. Insert into a Sorted Circular Linked List](#708)
 
 ## Linked List
 
@@ -120,13 +132,19 @@
 
 [445. Add Two Numbers II](#445)
 
+[234. Palindrome Linked List](#234)
+
+[430. Flatten a Multilevel Doubly Linked List](#430)
+
+[708. Insert into a Sorted Circular Linked List](#708)
+
 # demo
 
 &nbsp;
 
 <!-- from here -->
 
-## 445. Add Two Numbers II <a id=""></a>
+## 708. Insert into a Sorted Circular Linked List <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -1835,5 +1853,462 @@ class Solution {
 
 <p><strong>TC : O(n + m)</strong></p>
 <p><strong>SC : O(m + n) stack, if use reverse SC is O(1)</strong></p>
+
+&nbsp;
+
+## 234. Palindrome Linked List <a id="234"></a>
+
+<div class="notranslate"><p>Given the <code>head</code> of a singly linked list, return <code>true</code> if it is a palindrome.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 422px; height: 62px;" src="https://assets.leetcode.com/uploads/2021/03/03/pal1linked-list.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2,2,1]
+<strong>Output:</strong> true
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="width: 182px; height: 62px;" src="https://assets.leetcode.com/uploads/2021/03/03/pal2linked-list.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2]
+<strong>Output:</strong> false
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the list is in the range <code>[1, 10<sup>5</sup>]</code>.</li>
+	<li><code>0 &lt;= Node.val &lt;= 9</code></li>
+</ul>
+<p>&nbsp;</p>
+<strong>Follow up:</strong> Could you do it in <code>O(n)</code> time and <code>O(1)</code> space?</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : use array and two pointer to solve this problem, but this is not a smart way.</strong></p>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : recursion (SC still O(n) call stack)</strong></p>
+
+```
+we use a global variable frontNode to traverse from the head, and use the recusive way to compare the Node in the end, this is another way of two pointers.
+```
+
+```Java
+class Solution {
+    private ListNode frontPointer;
+
+    private boolean recursivelyCheck(ListNode currentNode) {
+        if (currentNode != null) {
+            if (!recursivelyCheck(currentNode.next)) {
+                return false;
+            }
+            if (currentNode.val != frontPointer.val) {
+                return false;
+            }
+            frontPointer = frontPointer.next;
+        }
+        return true;
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        frontPointer = head;
+        return recursivelyCheck(head);
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(n) call stack space</strong></p>
+
+<p>&nbsp;</p>
+<p><strong>Solution3 : </strong></p>
+
+```
+1.use fast - slow pointer to get middle of the linked list.
+2.reverse slow.next
+3.compare two linkedList
+
+1) case 1, length is even:
+0 1 2 3 4 5
+1 2 3 1 2 3
+        f
+    s
+2) case 2, length is odd:
+0 1 2 3 4
+1 2 3 1 2
+    s
+        f
+
+in both cases, we just need to reverse the slow.next and compare the two linkedList from the head;
+
+```
+
+```Java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow = getMiddle(head);
+        ListNode l2 = reverse(slow.next);
+        slow.next = null;
+        while (head != null && l2 != null) {
+            if (head.val != l2.val) return false;
+            head = head.next;
+            l2 = l2.next;
+        }
+        return true;
+    }
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        ListNode next = null;
+        while (head != null) {
+            next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+    private ListNode getMiddle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 430. Flatten a Multilevel Doubly Linked List <a id="430"></a>
+
+<div class="notranslate"><p>You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional <strong>child pointer</strong>. This child pointer may or may not point to a separate doubly linked list, also containing these special nodes. These child lists may have one or more children of their own, and so on, to produce a <strong>multilevel data structure</strong> as shown in the example below.</p>
+<p>Given the <code>head</code> of the first level of the list, <strong>flatten</strong> the list so that all the nodes appear in a single-level, doubly linked list. Let <code>curr</code> be a node with a child list. The nodes in the child list should appear <strong>after</strong> <code>curr</code> and <strong>before</strong> <code>curr.next</code> in the flattened list.</p>
+<p>Return <em>the </em><code>head</code><em> of the flattened list. The nodes in the list must have <strong>all</strong> of their child pointers set to </em><code>null</code>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 700px; height: 339px;" src="https://assets.leetcode.com/uploads/2021/11/09/flatten11.jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
+<strong>Output:</strong> [1,2,3,7,8,11,12,9,10,4,5,6]
+<strong>Explanation:</strong> The multilevel linked list in the input is shown.
+After flattening the multilevel linked list it becomes:
+<img style="width: 1000px; height: 69px;" src="https://assets.leetcode.com/uploads/2021/11/09/flatten12.jpg">
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="width: 200px; height: 200px;" src="https://assets.leetcode.com/uploads/2021/11/09/flatten2.1jpg" alt="">
+<pre><strong>Input:</strong> head = [1,2,null,3]
+<strong>Output:</strong> [1,3,2]
+<strong>Explanation:</strong> The multilevel linked list in the input is shown.
+After flattening the multilevel linked list it becomes:
+<img style="width: 300px; height: 87px;" src="https://assets.leetcode.com/uploads/2021/11/24/list.jpg">
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> head = []
+<strong>Output:</strong> []
+<strong>Explanation:</strong> There could be empty list in the input.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of Nodes will not exceed <code>1000</code>.</li>
+	<li><code>1 &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>How the multilevel linked list is represented in test cases:</strong></p>
+<p>We use the multilevel linked list from <strong>Example 1</strong> above:</p>
+<pre> 1---2---3---4---5---6--NULL
+         |
+         7---8---9---10--NULL
+             |
+             11--12--NULL</pre>
+<p>The serialization of each level is as follows:</p>
+<pre>[1,2,3,4,5,6,null]
+[7,8,9,10,null]
+[11,12,null]
+</pre>
+<p>To serialize all levels together, we will add nulls in each level to signify no node connects to the upper node of the previous level. The serialization becomes:</p>
+<pre>[1,    2,    3, 4, 5, 6, null]
+             |
+[null, null, 7,    8, 9, 10, null]
+                   |
+[            null, 11, 12, null]
+</pre>
+<p>Merging the serialization of each level and removing trailing nulls we obtain:</p>
+<pre>[1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
+</pre>
+</div>
+
+<div class="css-1v8309f-primary-secondary-overlay-overlay"><p>【四种方法五种实现】</p>
+<p>尝试深度剖析这道题，从借助栈的迭代，到借助栈的递归，到无需额外栈的递归，再到无需栈的迭代（空间复杂度为O(1)的自上而下的展平）。分析并给出这些逐步优化的解法，共给出四种解法，五种实现。</p>
+<ol>
+<li>解法一：迭代。时间复杂度为O(n)，借助栈实现链回上一层操作，空间复杂度为O(n)。在该方法基于结束展平的不同条件，给出两种有细小差别的实现。</li>
+<li>解法二：递归+显式栈。在解法一中通过cur = cur.next来不断考察后续结点，本解法以递归的方式来推进遍历。虽然递归本身有隐式的方法栈，但本方法基于解法一，只是用递归推进代替了迭代推进，因此也需要借助一个显式栈来完成下层链回到上层的操作。显式栈和递归栈使得空间复杂度相比迭代法要高，虽同为O(n)，但系数较大。</li>
+<li>解法三：递归。因为递归具有隐式的方法栈，在“回归”过程中即可记录当前层尾结点，以实现链回上层的操作，因此无需额外的显式栈。但由于存在递归栈，空间复杂度仍为O(n)。</li>
+<li>解法四：迭代+常数空间。前述解法均层层深入到最后一层再自下而上地展平。首先想到这些方法主要是因为dfs的惯性思维，实际上我们也可以自上而下地展平。每当遇到child，就展平cur.child所在层，方法是找到该层last后直接使其与上一层的cur.next相链接。由于仅需若干变量而无需栈，空间复杂度为O(1)。</li>
+</ol>
+<p>另外，本题由于涉及到链的修改，因此不太适合从前序/中序/后序dfs的角度来处理。</p>
+<p>【解法一：迭代】</p>
+<p>算法描述</p>
+<p>程序整体的行为是依次遍历结点，遍历的过程可以以迭代的方式在一个while中完成。遇到child则进入child所在层，若走到当前层最后一个结点，则考察上一层是否有后续结点，若有则链回上一层（展平）。为了能够链回上一层，需要在通过当前结点cur进入child层时，先将cur.next保存起来，显然应当借助栈来保存。整体是一个层层深入后再自下而上展平的过程。现在来考虑完成展平（结束while）的条件。</p>
+<ul>
+<li>方案1. 当前结点cur为一个空结点，且无上一层（栈空）。这是以cur为当前层最后一个结点的next来考虑的。</li>
+<li>方案2. 当前结点cur不为空，但无cur.next和cur.child，且无上一层（栈空）。这是以cur为当前层最后一个结点来考虑的。</li>
+</ul>
+<p>【方案1】</p>
+<pre><code class="language-java"><span class="hljs-keyword">while</span>(cur != <span class="hljs-keyword">null</span> || !stack.isEmpty())
+</code></pre>
+<p>即只要cur不为空或者栈不为空（有上一层），则继续展平，只有当cur为空且栈空时才完成展平。进入while，有三种情形：</p>
+<ol>
+<li>if(cur != null &amp;&amp; cur.child != null), 表示有child，此时需链接cur与child。</li>
+<li>else if(cur == null)，表示处于本层最后，此时需要链回上一层（while条件保证此时栈不空）。</li>
+<li>上述情形以外，即cur不为null但无child，此时应考察下一个结点。在while最后统一执行cur = cur.next考察下一个结点。</li>
+</ol>
+<p>在编写代码的时候我们会发现，情形2需要链回上一层时，由于cur为空，无法使得当前层最后一个结点链到上一层的后续结点（此时的栈顶），为了解决这个问题要引入一个prev变量记录当前结点的前驱。在考察下一个结点cur = cur.next之前还要加上prev = cur。</p>
+<p>【方案2】</p>
+<pre><code class="language-java"><span class="hljs-keyword">while</span>(cur.next != <span class="hljs-keyword">null</span> || cur.child != <span class="hljs-keyword">null</span> || !stack.isEmpty())
+</code></pre>
+<p>即在cur不为空的前提下，只有cur.next, cur.child和栈均为空时，才完成展平。进入while，类似方案1，也有如下三种情形：</p>
+<ol>
+<li>if(cur.child != null), 表示有child，此时需链接cur与child。</li>
+<li>else if(cur.next == null)，表示cur为本层最后一个结点，此时需要链回上一层（while条件保证此时栈不空）</li>
+<li>上述情形以外，即cur无child但有next，此时应考察下一个结点。在while最后统一执行cur = cur.next。</li>
+</ol>
+<p>因为while中不考察cur是否为null，因此为了覆盖head为null的情形，需要加入一个 if(head == null) 特判。</p>
+<ul>
+<li>时间复杂度：O(n)，所有结点都考察一次。</li>
+<li>空间复杂度：O(n)，栈空间，当多级链表为一条竖直的链时为最坏情形。</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-comment">// 方案1</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        Deque&lt;Node&gt; stack = <span class="hljs-keyword">new</span> ArrayDeque&lt;&gt;();
+        Node cur = head, prev = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">while</span>(cur != <span class="hljs-keyword">null</span> || !stack.isEmpty()){
+            <span class="hljs-keyword">if</span>(cur == <span class="hljs-keyword">null</span>){ <span class="hljs-comment">// 此时栈必不空（能够进入while的条件）,链接prev和上一级后续结点</span>
+                cur = prev; <span class="hljs-comment">// prev在此时起作用，使得当前层最后一个结点(prev)能够链回上一层</span>
+                cur.next = stack.peek();
+                stack.pop().prev = cur;
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(cur.child != <span class="hljs-keyword">null</span>){ <span class="hljs-comment">// cur不为空且有child时</span>
+                <span class="hljs-keyword">if</span>(cur.next != <span class="hljs-keyword">null</span>) stack.push(cur.next); <span class="hljs-comment">// 若有next将next推入栈中</span>
+                cur.child.prev = cur; <span class="hljs-comment">// child链接cur</span>
+                cur.next = cur.child; <span class="hljs-comment">// cur链接child</span>
+                cur.child = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// child置null</span>
+            }
+            prev = cur; <span class="hljs-comment">// 调整prev</span>
+            cur = cur.next; <span class="hljs-comment">// 调整cur</span>
+        }
+        <span class="hljs-keyword">return</span> head;
+    }
+}
+</code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 方案2</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        <span class="hljs-keyword">if</span>(head == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>; <span class="hljs-comment">// 特判</span>
+        Deque&lt;Node&gt; stack = <span class="hljs-keyword">new</span> ArrayDeque&lt;&gt;();
+        Node cur = head;
+        <span class="hljs-keyword">while</span>(cur.next != <span class="hljs-keyword">null</span> || cur.child != <span class="hljs-keyword">null</span> || !stack.isEmpty()){
+            <span class="hljs-keyword">if</span>(cur.child != <span class="hljs-keyword">null</span>){ <span class="hljs-comment">// 先处理child</span>
+                <span class="hljs-keyword">if</span>(cur.next != <span class="hljs-keyword">null</span>) stack.push(cur.next); <span class="hljs-comment">// 若有next将next推入栈中</span>
+                cur.child.prev = cur; <span class="hljs-comment">// child链接cur</span>
+                cur.next = cur.child; <span class="hljs-comment">// cur链接child</span>
+                cur.child = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// child置null</span>
+            }
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(cur.next == <span class="hljs-keyword">null</span>){ <span class="hljs-comment">// 若无child且无next，则栈不为空（while条件保证），链回上一级</span>
+                cur.next = stack.peek();
+                stack.pop().prev = cur;
+            }
+            cur = cur.next; <span class="hljs-comment">// 前面已经调整了链接关系，可直接移动到下一个结点</span>
+        }
+        <span class="hljs-keyword">return</span> head;
+    }
+}
+</code></pre>
+<p>【解法二：递归+显式栈】</p>
+<p>算法描述</p>
+<p>前述迭代做法以cur = cur.next来遍历，通过递归调用flatten来遍历时，即是本方法。</p>
+<ul>
+<li>时间复杂度：O(n)，所有结点都考察一次。</li>
+<li>空间复杂度：O(n)，递归栈和显式栈空间。</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    Deque&lt;Node&gt; stack = <span class="hljs-keyword">new</span> ArrayDeque&lt;&gt;(); 
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        <span class="hljs-keyword">if</span>(head == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> head; <span class="hljs-comment">// 特判</span>
+        <span class="hljs-keyword">if</span>(head.child != <span class="hljs-keyword">null</span>){  <span class="hljs-comment">// 当前节点child不为空，链接child</span>
+            <span class="hljs-keyword">if</span>(head.next != <span class="hljs-keyword">null</span>) stack.push(head.next); 
+            head.next = head.child; 
+            head.next.prev = head;
+            head.child = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// child置为null</span>
+        }
+        <span class="hljs-keyword">if</span>(head.next == <span class="hljs-keyword">null</span> &amp;&amp; !stack.isEmpty()) { <span class="hljs-comment">// 到当前层末尾且栈不空，链回上一层</span>
+            head.next = stack.pop();
+            head.next.prev = head;
+        }
+        flatten(head.next); <span class="hljs-comment">// 通过递归调用遍历结点</span>
+        <span class="hljs-keyword">return</span> head;
+    }
+}
+</code></pre>
+<p>【解法三：递归】</p>
+<p>算法描述</p>
+<p>递归的过程本身有隐式方法栈，因此不用显示栈也能够展平，关键仍在于如何利用递归过程的隐式栈链回上一层。考虑递归方法dfs(cur)实现展平，cur为当前结点，若cur无child，则在此处无需展平，考察下一个结点cur.next。否则总是递归调用dfs(cur.child)展平以child为首后续部分。展平后应当能返回展平链的最后一个结点last，并连接cur.next与last，因此dfs应返回last结点。关键代码如下。</p>
+<pre><code class="language-java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        dfs(head);
+        <span class="hljs-keyword">return</span> head;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">dfs</span><span class="hljs-params">(Node cur)</span></span>{ <span class="hljs-comment">// 以cur开头的后续部分，返回展平后的尾结点last</span>
+        Node last = cur;
+        <span class="hljs-keyword">while</span>(cur != <span class="hljs-keyword">null</span>){
+            <span class="hljs-keyword">if</span>(cur.child != <span class="hljs-keyword">null</span>) { <span class="hljs-comment">// 有child则递归地处理child</span>
+                Node childLast = dfs(cur.child); <span class="hljs-comment">// 展平处理的关键，总是先递归地处理child，得到当前链的最后一个结点</span>
+                <span class="hljs-comment">// 此处链接cur与child</span>
+                <span class="hljs-comment">// 此处链接childLast与cur.next（当cur.next不为null时）</span>
+                }
+                last = childLast;
+            }
+            <span class="hljs-comment">// 考察下一个结点</span>
+        }
+        <span class="hljs-keyword">return</span> last;
+    }
+}
+</code></pre>
+<ul>
+<li>时间复杂度：O(n)，所有结点都考察一次。</li>
+<li>空间复杂度：O(n)，递归栈空间。</li>
+</ul>
+<p>实现代码</p>
+<pre><code class="language-java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        dfs(head);
+        <span class="hljs-keyword">return</span> head;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">dfs</span><span class="hljs-params">(Node cur)</span></span>{ <span class="hljs-comment">// 以cur开头的后续部分，返回展平后的尾结点last</span>
+        Node last = cur;
+        <span class="hljs-keyword">while</span>(cur != <span class="hljs-keyword">null</span>){
+            Node next = cur.next; 
+            <span class="hljs-keyword">if</span>(cur.child != <span class="hljs-keyword">null</span>) { <span class="hljs-comment">// 有child则递归地处理child</span>
+                Node childLast = dfs(cur.child); <span class="hljs-comment">// 展平处理的关键，总是先递归地处理child，得到当前链的最后一个结点</span>
+                cur.next = cur.child; <span class="hljs-comment">// 首次到此步说明已展平以cur.child为首的后续部分，则链接cur与child</span>
+                cur.child.prev = cur;
+                cur.child = <span class="hljs-keyword">null</span>;
+                <span class="hljs-keyword">if</span>(next != <span class="hljs-keyword">null</span>){ <span class="hljs-comment">// 若有next，链接childLast与next</span>
+                    childLast.next = next;
+                    next.prev = childLast;
+                }
+                last = childLast;
+            }
+            <span class="hljs-keyword">else</span> last = cur; <span class="hljs-comment">// 此行使得遍历到一层最后的cur == null时，能够返回最后一个结点</span>
+            cur = next; <span class="hljs-comment">// 考察下一个结点</span>
+        }
+        <span class="hljs-keyword">return</span> last;
+    }
+}
+</code></pre>
+<p>【解法四：迭代+自上而下展平】</p>
+<p>算法描述</p>
+<p>前述解法均层层深入到最后一层再自下而上地展平。首先想到这些方法主要是因为dfs的惯性思维，实际上我们也可以自上而下地展平。每当遇到child，就展平cur.child所在层，方法是找到该层last后直接使其与上一层的cur.next相链接。该方法有一些Morris遍历或者说线索树的味道，但实现起来显然要容易得多。由于仅需若干变量而无需栈，空间复杂度为O(1)。</p>
+<ul>
+<li>时间复杂度：O(n)，除了第一层外所有层，都会因为寻找last而被遍历一次。而遍历主过程也会将所有结点遍历一次。因此遍历结点次数最多不超过2n次。</li>
+<li>空间复杂度：O(1)</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Node <span class="hljs-title">flatten</span><span class="hljs-params">(Node head)</span> </span>{
+        Node cur = head, next = <span class="hljs-keyword">null</span>, last = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// 为体现next, last的哨兵性质，在for之前就声明</span>
+        <span class="hljs-keyword">for</span>(; cur != <span class="hljs-keyword">null</span>; cur = cur.next) {
+            <span class="hljs-keyword">if</span>(cur.child == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// cur无child，跳过</span>
+            next = cur.next; <span class="hljs-comment">// 提前记录同层下一个结点</span>
+            cur.next = cur.child; <span class="hljs-comment">// cur链接child</span>
+            cur.child.prev = cur; <span class="hljs-comment">// child链接cur</span>
+            cur.child = <span class="hljs-keyword">null</span>; 
+            last = cur.next; <span class="hljs-comment">// last为child层最后一个结点</span>
+            <span class="hljs-keyword">while</span>(last.next != <span class="hljs-keyword">null</span>) last = last.next; <span class="hljs-comment">// 找到last</span>
+            last.next = next; <span class="hljs-comment">// 链回上层next</span>
+            <span class="hljs-keyword">if</span>(next != <span class="hljs-keyword">null</span>) next.prev = last; <span class="hljs-comment">// next链接last</span>
+        }
+        <span class="hljs-keyword">return</span> head;
+    }
+}
+</code></pre>
+</div>
+
+&nbsp;
+
+## 708. Insert into a Sorted Circular Linked List <a id="708"></a>
+
+<div class="content__u3I1 question-content__JfgR"><div><p>Given a Circular Linked List node, which is sorted in ascending order, write a function to insert a value <code>insertVal</code> into the list such that it remains a sorted circular list. The given node can be a reference to any single node in the list and may not necessarily be the smallest value in the circular list.</p>
+<p>If there are multiple suitable places for insertion, you may choose any place to insert the new value. After the insertion, the circular list should remain sorted.</p>
+<p>If the list is empty (i.e., the given node is <code>null</code>), you should create a new single circular list and return the reference to that single node. Otherwise, you should return the originally given node.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/01/19/example_1_before_65p.jpg" style="width: 250px; height: 149px;"><br>
+&nbsp;
+<pre><strong>Input:</strong> head = [3,4,1], insertVal = 2
+<strong>Output:</strong> [3,4,1,2]
+<strong>Explanation:</strong> In the figure above, there is a sorted circular list of three elements. You are given a reference to the node with value 3, and we need to insert 2 into the list. The new node should be inserted between node 1 and node 3. After the insertion, the list should look like this, and we should still return node 3.
+<img alt="" src="https://assets.leetcode.com/uploads/2019/01/19/example_1_after_65p.jpg" style="width: 250px; height: 149px;">
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> head = [], insertVal = 1
+<strong>Output:</strong> [1]
+<strong>Explanation:</strong> The list is empty (given head is&nbsp;<code>null</code>). We create a new single circular list and return the reference to that single node.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> head = [1], insertVal = 0
+<strong>Output:</strong> [1,0]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the list is in the range <code>[0, 5 * 10<sup>4</sup>]</code>.</li>
+	<li><code>-10<sup>6</sup> &lt;= Node.val, insertVal &lt;= 10<sup>6</sup></code></li>
+</ul>
+</div></div>
+
+<p>&nbsp;</p>
+<p><strong>Solution1 : iteration</strong></p>
+
+```
+we have three cases to insert:
+1.commen case:  prev <= insert <= cur
+2. insert between end and start of the linkedlist:
+    1) 4, 1    insert 0/1
+    (prev.val > cur.val && cur.val >= insertVal)
+    2) 4, 1    insert 4/5
+    (prev.val > cur.val && insertVal >= prev.val)
+when we meet these three cases, just stop,
+insert between prev and current node.
+```
+
+```Java
+class Solution {
+    public Node insert(Node head, int insertVal) {
+        if (head == null) {
+            Node res = new Node(insertVal);
+            res.next = res;
+            return res;
+        }
+        if (head.next == head) {
+            head.next = new Node(insertVal, head.next);
+            return head;
+        }
+        Node prev = head;
+        Node cur = head.next;
+        while (cur != head) {
+            // here is three cases we need to insert
+            if ( (cur.val >= insertVal && prev.val <= insertVal) || (prev.val > cur.val && cur.val >= insertVal) || (prev.val > cur.val && insertVal >= prev.val) ) break;
+            prev = prev.next;
+            cur = cur.next;
+        }
+        prev.next = new Node(insertVal, prev.next);
+        return head;
+    }
+}
+```
+
+<p><strong>TC : O(1)</strong></p>
+<p><strong>SC : O(1)</strong></p>
 
 &nbsp;
