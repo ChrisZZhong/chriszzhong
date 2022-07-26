@@ -52,6 +52,11 @@
 
 [708. Insert into a Sorted Circular Linked List](#708)
 
+[380. Insert Delete GetRandom O(1)](#380)
+
+[242. Valid Anagram](#242)
+
+[146. LRU Cache](#146)
 &nbsp;
 
 # categories
@@ -65,6 +70,8 @@
 [713. Subarray Product Less Than K](#713)
 
 [3. Longest Substring Without Repeating Characters](#3)
+
+[242. Valid Anagram](#242)
 
 ## Bit Operation
 
@@ -138,13 +145,19 @@
 
 [708. Insert into a Sorted Circular Linked List](#708)
 
+## implement Data Structure
+
+[380. Insert Delete GetRandom O(1)](#380)
+
+[146. LRU Cache](#146)
+
 # demo
 
 &nbsp;
 
 <!-- from here -->
 
-## 708. Insert into a Sorted Circular Linked List <a id=""></a>
+## 146. LRU Cache <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -2310,5 +2323,310 @@ class Solution {
 
 <p><strong>TC : O(n)</strong></p>
 <p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 380. Insert Delete GetRandom O(1) <a id="380"></a>
+
+<div class="notranslate"><p>Implement the <code>RandomizedSet</code> class:</p>
+<ul>
+	<li><code>RandomizedSet()</code> Initializes the <code>RandomizedSet</code> object.</li>
+	<li><code>bool insert(int val)</code> Inserts an item <code>val</code> into the set if not present. Returns <code>true</code> if the item was not present, <code>false</code> otherwise.</li>
+	<li><code>bool remove(int val)</code> Removes an item <code>val</code> from the set if present. Returns <code>true</code> if the item was present, <code>false</code> otherwise.</li>
+	<li><code>int getRandom()</code> Returns a random element from the current set of elements (it's guaranteed that at least one element exists when this method is called). Each element must have the <b>same probability</b> of being returned.</li>
+</ul>
+<p>You must implement the functions of the class such that each function works in&nbsp;<strong>average</strong>&nbsp;<code>O(1)</code>&nbsp;time complexity.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input</strong>
+["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
+[[], [1], [2], [2], [], [1], [2], []]
+<strong>Output</strong>
+[null, true, false, true, 2, true, false, 2]
+<strong>Explanation</strong>
+RandomizedSet randomizedSet = new RandomizedSet();
+randomizedSet.insert(1); // Inserts 1 to the set. Returns true as 1 was inserted successfully.
+randomizedSet.remove(2); // Returns false as 2 does not exist in the set.
+randomizedSet.insert(2); // Inserts 2 to the set, returns true. Set now contains [1,2].
+randomizedSet.getRandom(); // getRandom() should return either 1 or 2 randomly.
+randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contains [2].
+randomizedSet.insert(2); // 2 was already in the set, so return false.
+randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>-2<sup>31</sup> &lt;= val &lt;= 2<sup>31</sup> - 1</code></li>
+	<li>At most <code>2 *&nbsp;</code><code>10<sup>5</sup></code> calls will be made to <code>insert</code>, <code>remove</code>, and <code>getRandom</code>.</li>
+	<li>There will be <strong>at least one</strong> element in the data structure when <code>getRandom</code> is called.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Use List and HashMap to solve this problem in O(1)</strong></p>
+
+```
+Use hashmap we can do contains in O(1)
+Use list we can do insert and remove in O(1)
+Use their combination, we can solve this problem in O(1)
+
+The hardest part is the remove: how to remove in O(1) in a list without reset index
+
+map              0  1  2  3  4
+suppose list is [1, 2, 3, 4, 5]
+we want to remove 3 from the list
+
+1. put the last element of the list to the index of 3, reset 5's index in map to 2
+2. delete key 3 in map
+
+map              0  1  2  3
+suppose list is [1, 2, 5, 4]
+
+```
+
+```Java
+class RandomizedSet {
+    Map<Integer, Integer> map;
+    List<Integer> list;
+    Random random;
+
+    /** Initialize your data structure here. */
+    public RandomizedSet() {
+        map = new HashMap<>();
+        list = new ArrayList<>();
+        random = new Random();
+    }
+
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+    public boolean insert(int val) {
+        if (map.containsKey(val)) return false;
+        else {
+            map.put(val, list.size());
+            list.add(val);
+            return true;
+        }
+    }
+
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    public boolean remove(int val) {
+        if (map.containsKey(val)) {
+            int index = map.get(val);
+            int last = list.get(list.size() - 1);
+            list.set(index, last);
+            map.put(last, index);
+            list.remove(list.size() - 1);
+            map.remove(val);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** Get a random element from the set. */
+    public int getRandom() {
+        int ran = random.nextInt(list.size());
+        return list.get(ran);
+    }
+}
+```
+
+<p><strong>TC : O(1)</strong></p>
+<p><strong>SC : O(n)</strong></p>
+
+&nbsp;
+
+## 242. Valid Anagram <a id="242"></a>
+
+<p>&nbsp;</p>
+<p><strong>Solution : sliding window, use map/array can solve this problem in SC: O(n). With bit operation, it can be solved in SC: O(1). Here we use bit operation to solve this problem</strong></p>
+
+```Java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.equals(t) || s.length() != t.length()) return false;
+        int res1 = 0;
+        int res2 = 0;
+        for (int i = 0; i < s.length(); i++) {
+            res1 ^=  ((1 << (s.charAt(i) - 'a')) ^ (1 << (t.charAt(i) - 'a')));
+            res2 += ((1 << (s.charAt(i) - 'a')) - (1 << (t.charAt(i) - 'a')));
+        }
+        return (res1 == 0) && (res2 == 0);
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
+
+## 146. LRU Cache <a id="146"></a>
+
+<div class="notranslate"><p>Design a data structure that follows the constraints of a <strong><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU">Least Recently Used (LRU) cache</a></strong>.</p>
+<p>Implement the <code>LRUCache</code> class:</p>
+<ul>
+	<li><code>LRUCache(int capacity)</code> Initialize the LRU cache with <strong>positive</strong> size <code>capacity</code>.</li>
+	<li><code>int get(int key)</code> Return the value of the <code>key</code> if the key exists, otherwise return <code>-1</code>.</li>
+	<li><code>void put(int key, int value)</code>&nbsp;Update the value of the <code>key</code> if the <code>key</code> exists. Otherwise, add the <code>key-value</code> pair to the cache. If the number of keys exceeds the <code>capacity</code> from this operation, <strong>evict</strong> the least recently used key.</li>
+</ul>
+<p>The functions&nbsp;<code data-stringify-type="code">get</code>&nbsp;and&nbsp;<code data-stringify-type="code">put</code>&nbsp;must each run in <code>O(1)</code> average time complexity.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input</strong>
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+<strong>Output</strong>
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+<strong>Explanation</strong>
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1);    // return 1
+lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+lRUCache.get(2);    // returns -1 (not found)
+lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+lRUCache.get(1);    // return -1 (not found)
+lRUCache.get(3);    // return 3
+lRUCache.get(4);    // return 4
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= capacity &lt;= 3000</code></li>
+	<li><code>0 &lt;= key &lt;= 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= value &lt;= 10<sup>5</sup></code></li>
+	<li>At most 2<code>&nbsp;* 10<sup>5</sup></code>&nbsp;calls will be made to <code>get</code> and <code>put</code>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : 哈希表-双向链表</strong></p>
+
+<h4 id="方法一：哈希表-双向链表"><a class="header-anchor" href="#方法一：哈希表-双向链表" target="_blank"></a> 方法一：哈希表 + 双向链表</h4>
+<p><strong>算法</strong></p>
+<p>LRU 缓存机制可以通过哈希表辅以双向链表实现，我们用一个哈希表和一个双向链表维护所有在缓存中的键值对。</p>
+<ul>
+<li>
+<p>双向链表按照被使用的顺序存储了这些键值对，靠近头部的键值对是最近使用的，而靠近尾部的键值对是最久未使用的。</p>
+</li>
+<li>
+<p>哈希表即为普通的哈希映射（HashMap），通过缓存数据的键映射到其在双向链表中的位置。</p>
+</li>
+</ul>
+<p>这样以来，我们首先使用哈希表进行定位，找出缓存项在双向链表中的位置，随后将其移动到双向链表的头部，即可在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 的时间内完成 <code>get</code> 或者 <code>put</code> 操作。具体的方法如下：</p>
+<ul>
+<li>
+<p>对于 <code>get</code> 操作，首先判断 <code>key</code> 是否存在：</p>
+<ul>
+<li>
+<p>如果 <code>key</code> 不存在，则返回 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span>；</p>
+</li>
+<li>
+<p>如果 <code>key</code> 存在，则 <code>key</code> 对应的节点是最近被使用的节点。通过哈希表定位到该节点在双向链表中的位置，并将其移动到双向链表的头部，最后返回该节点的值。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>对于 <code>put</code> 操作，首先判断 <code>key</code> 是否存在：</p>
+<ul>
+<li>
+<p>如果 <code>key</code> 不存在，使用 <code>key</code> 和 <code>value</code> 创建一个新的节点，在双向链表的头部添加该节点，并将 <code>key</code> 和该节点添加进哈希表中。然后判断双向链表的节点数是否超出容量，如果超出容量，则删除双向链表的尾部节点，并删除哈希表中对应的项；</p>
+</li>
+<li>
+<p>如果 <code>key</code> 存在，则与 <code>get</code> 操作类似，先通过哈希表定位，再将对应的节点的值更新为 <code>value</code>，并将该节点移到双向链表的头部。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>上述各项操作中，访问哈希表的时间复杂度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>，在双向链表的头部添加节点、在双向链表的尾部删除节点的复杂度也为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。而将一个节点移到双向链表的头部，可以分成「删除该节点」和「在双向链表的头部添加节点」两步操作，都可以在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> 时间内完成。</p>
+
+```Java
+public class LRUCache {
+    class DLinkedNode {
+        int key;
+        int value;
+        DLinkedNode prev;
+        DLinkedNode next;
+        public DLinkedNode() {}
+        public DLinkedNode(int _key, int _value) {key = _key; value = _value;}
+    }
+
+    private Map<Integer, DLinkedNode> cache = new HashMap<Integer, DLinkedNode>();
+    private int size;
+    private int capacity;
+    private DLinkedNode head, tail;
+
+    public LRUCache(int capacity) {
+        this.size = 0;
+        this.capacity = capacity;
+        // 使用伪头部和伪尾部节点
+        head = new DLinkedNode();
+        tail = new DLinkedNode();
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        DLinkedNode node = cache.get(key);
+        if (node == null) {
+            return -1;
+        }
+        // 如果 key 存在，先通过哈希表定位，再移到头部
+        moveToHead(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        DLinkedNode node = cache.get(key);
+        if (node == null) {
+            // 如果 key 不存在，创建一个新的节点
+            DLinkedNode newNode = new DLinkedNode(key, value);
+            // 添加进哈希表
+            cache.put(key, newNode);
+            // 添加至双向链表的头部
+            addToHead(newNode);
+            ++size;
+            if (size > capacity) {
+                // 如果超出容量，删除双向链表的尾部节点
+                DLinkedNode tail = removeTail();
+                // 删除哈希表中对应的项
+                cache.remove(tail.key);
+                --size;
+            }
+        }
+        else {
+            // 如果 key 存在，先通过哈希表定位，再修改 value，并移到头部
+            node.value = value;
+            moveToHead(node);
+        }
+    }
+
+    private void addToHead(DLinkedNode node) {
+        node.prev = head;
+        node.next = head.next;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    private void removeNode(DLinkedNode node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void moveToHead(DLinkedNode node) {
+        removeNode(node);
+        addToHead(node);
+    }
+
+    private DLinkedNode removeTail() {
+        DLinkedNode res = tail.prev;
+        removeNode(res);
+        return res;
+    }
+}
+```
+
+<p><strong>TC : O(1)</strong></p>
+<p><strong>SC : O(n)</strong></p>
 
 &nbsp;
