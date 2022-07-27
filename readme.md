@@ -57,6 +57,12 @@
 [242. Valid Anagram](#242)
 
 [146. LRU Cache](#146)
+
+[49. Group Anagrams](#49)
+
+[953. Verifying an Alien Dictionary](#953)
+
+[539. Minimum Time Difference](#539)
 &nbsp;
 
 # categories
@@ -153,11 +159,9 @@
 
 # demo
 
-&nbsp;
-
 <!-- from here -->
 
-## 146. LRU Cache <a id=""></a>
+## 539. Minimum Time Difference <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -2628,5 +2632,212 @@ public class LRUCache {
 
 <p><strong>TC : O(1)</strong></p>
 <p><strong>SC : O(n)</strong></p>
+
+&nbsp;
+
+## 49. Group Anagrams <a id="49"></a>
+
+<div class="notranslate"><p>Given an array of strings <code>strs</code>, group <strong>the anagrams</strong> together. You can return the answer in <strong>any order</strong>.</p>
+
+<p>An <strong>Anagram</strong> is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.</p>
+
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> strs = ["eat","tea","tan","ate","nat","bat"]
+<strong>Output:</strong> [["bat"],["nat","tan"],["ate","eat","tea"]]
+</pre><p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> strs = [""]
+<strong>Output:</strong> [[""]]
+</pre><p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> strs = ["a"]
+<strong>Output:</strong> [["a"]]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= strs.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>0 &lt;= strs[i].length &lt;= 100</code></li>
+	<li><code>strs[i]</code> consists of lowercase English letters.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : sort the String and use the map to solve this problem</strong></p>
+
+```Java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str : strs) {
+            char[] array = str.toCharArray();
+            Arrays.sort(array);
+            String key = new String(array);
+            List<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
+}
+```
+
+<p><strong>TC : O(nk logk)  n is the number of string, k is the lonest length of string, need k log k time to sort.</strong></p>
+<p><strong>SC : O(nk) map</strong></p>
+
+<p>&nbsp;</p>
+<p><strong>Solution2 : Count</strong></p>
+
+```Java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str : strs) {
+            int[] counts = new int[26];
+            int length = str.length();
+            for (int i = 0; i < length; i++) {
+                counts[str.charAt(i) - 'a']++;
+            }
+            // 将每个出现次数大于 0 的字母和出现次数按顺序拼接成字符串，作为哈希表的键
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 26; i++) {
+                if (counts[i] != 0) {
+                    sb.append((char) ('a' + i));
+                    sb.append(counts[i]);
+                }
+            }
+            String key = sb.toString();
+            List<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
+}
+```
+
+<p><strong>TC : O(nk logk)  n is the number of string, k is the lonest length of string, need k log k time to sort.</strong></p>
+<p><strong>SC : O(nk) map</strong></p>
+
+&nbsp;
+
+## 953. Verifying an Alien Dictionary <a id="953"></a>
+
+<div class="notranslate"><p>In an alien language, surprisingly, they also use English lowercase letters, but possibly in a different <code>order</code>. The <code>order</code> of the alphabet is some permutation of lowercase letters.</p>
+<p>Given a sequence of <code>words</code> written in the alien language, and the <code>order</code> of the alphabet, return <code>true</code> if and only if the given <code>words</code> are sorted lexicographically in this alien language.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+<strong>Output:</strong> true
+<strong>Explanation: </strong>As 'h' comes before 'l' in this language, then the sequence is sorted.
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> words = ["word","world","row"], order = "worldabcefghijkmnpqstuvxyz"
+<strong>Output:</strong> false
+<strong>Explanation: </strong>As 'd' comes after 'l' in this language, then words[0] &gt; words[1], hence the sequence is unsorted.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> words = ["apple","app"], order = "abcdefghijklmnopqrstuvwxyz"
+<strong>Output:</strong> false
+<strong>Explanation: </strong>The first three characters "app" match, and the second string is shorter (in size.) According to lexicographical rules "apple" &gt; "app", because 'l' &gt; '∅', where '∅' is defined as the blank character which is less than any other character (<a href="https://en.wikipedia.org/wiki/Lexicographical_order">More info</a>).
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= words.length &lt;= 100</code></li>
+	<li><code>1 &lt;= words[i].length &lt;= 20</code></li>
+	<li><code>order.length == 26</code></li>
+	<li>All characters in <code>words[i]</code> and <code>order</code> are English lowercase letters.</li>
+</ul>
+</div>
+
+<p>solution : use simple iteration</p>
+
+```Java
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        Map<Character, Integer> map = new HashMap<>();
+        // initialize map
+        int j = 0;
+        for (char ch : order.toCharArray()) {
+            map.put(ch, j++);
+        }
+        //
+        for (int i = 0; i < words.length - 1; i++) {
+            if (!check (words[i], words[i + 1], map)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean check(String s1, String s2, Map<Character, Integer> map) {
+        for (int i = 0; i < s1.length(); i++) {
+            if (i >= s2.length()) return false;
+            if (s1.charAt(i) == s2.charAt(i)) continue;
+            else if (map.get(s1.charAt(i)) > map.get(s2.charAt(i))) return false;
+            else return true;
+        }
+        return true;
+    }
+}
+```
+
+<p><strong>TC : O(mn) --> n is the num of array, m is the average length of string</strong></p>
+<p><strong>SC : O(C) --> map, distinc character C = 26</strong></p>
+
+&nbsp;
+
+## 539. Minimum Time Difference <a id="539"></a>
+
+<div class="notranslate">Given a list of 24-hour clock time points in <strong>"HH:MM"</strong> format, return <em>the minimum <b>minutes</b> difference between any two time-points in the list</em>.
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> timePoints = ["23:59","00:00"]
+<strong>Output:</strong> 1
+</pre><p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> timePoints = ["00:00","23:59","00:00"]
+<strong>Output:</strong> 0
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>2 &lt;= timePoints.length &lt;= 2 * 10<sup>4</sup></code></li>
+	<li><code>timePoints[i]</code> is in the format <strong>"HH:MM"</strong>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Sort the array first and compare current and previous string iteratively.</strong></p>
+
+```Java
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        int n = timePoints.size();
+        // the pigeonhole principle (鸽巢原理)
+        if (n > 1440) {
+            return 0;
+        }
+        // sort the array first
+        Collections.sort(timePoints);
+        int ans = Integer.MAX_VALUE;
+        int t0Minutes = getMinutes(timePoints.get(0));
+        int preMinutes = t0Minutes;
+        for (int i = 1; i < n; ++i) {
+            int minutes = getMinutes(timePoints.get(i));
+            ans = Math.min(ans, minutes - preMinutes); // 相邻时间的时间差
+            preMinutes = minutes;
+        }
+        ans = Math.min(ans, t0Minutes + 1440 - preMinutes); // 首尾时间的时间差 start to end
+        return ans;
+    }
+
+    public int getMinutes(String t) {
+        return ((t.charAt(0) - '0') * 10 + (t.charAt(1) - '0')) * 60 + (t.charAt(3) - '0') * 10 + (t.charAt(4) - '0');
+    }
+}
+```
+
+<p><strong>TC : O(nlogn)  sort time</strong></p>
+<p><strong>SC : O(n) sorted array</strong></p>
 
 &nbsp;
