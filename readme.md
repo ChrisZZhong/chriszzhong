@@ -1,3 +1,5 @@
+[leet code interview](面经/readme.md)
+
 # leetcode 剑指 offer
 
 [29. Divide Two Integers](#29)
@@ -63,6 +65,13 @@
 [953. Verifying an Alien Dictionary](#953)
 
 [539. Minimum Time Difference](#539)
+
+[150. Evaluate Reverse Polish Notation](#150)
+
+[735. Asteroid Collision](#735)
+
+[739. Daily Temperatures](#739)
+
 &nbsp;
 
 # categories
@@ -157,11 +166,21 @@
 
 [146. LRU Cache](#146)
 
+## stack
+
+[150. Evaluate Reverse Polish Notation](#150)
+
+[735. Asteroid Collision](#735)
+
+### monotonic stack
+
+[739. Daily Temperatures](#739)
+
 # demo
 
 <!-- from here -->
 
-## 539. Minimum Time Difference <a id=""></a>
+## 739. Daily Temperatures <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -2839,5 +2858,224 @@ class Solution {
 
 <p><strong>TC : O(nlogn)  sort time</strong></p>
 <p><strong>SC : O(n) sorted array</strong></p>
+
+&nbsp;
+
+## 150. Evaluate Reverse Polish Notation <a id="150"></a>
+
+<div class="notranslate"><p>Evaluate the value of an arithmetic expression in <a href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>.</p>
+<p>Valid operators are <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>. Each operand may be an integer or another expression.</p>
+<p><strong>Note</strong> that division between two integers should truncate toward zero.</p>
+<p>It is guaranteed that the given RPN expression is always valid. That means the expression would always evaluate to a result, and there will not be any division by zero operation.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> tokens = ["2","1","+","3","*"]
+<strong>Output:</strong> 9
+<strong>Explanation:</strong> ((2 + 1) * 3) = 9
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> tokens = ["4","13","5","/","+"]
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> (4 + (13 / 5)) = 6
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+<strong>Output:</strong> 22
+<strong>Explanation:</strong> ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= tokens.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>tokens[i]</code> is either an operator: <code>"+"</code>, <code>"-"</code>, <code>"*"</code>, or <code>"/"</code>, or an integer in the range <code>[-200, 200]</code>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : use stack to solve this problem, if meet +-*/ pop two number from stack, do the opertaion and push back. Mind the order of num1 and num2 in operation.</strong></p>
+
+```Java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (String str : tokens) {
+            if (str.equals("+") || str.equals("-") || str.equals("*") || str.equals("/"))
+                stack.offerFirst(operate(stack.pollFirst(), stack.pollFirst(), str));
+            else
+                stack.offerFirst(Integer.valueOf(str));
+        }
+        return stack.pollFirst();
+        }
+    private Integer operate(Integer str1, Integer str2, String ope) {
+        if (ope.equals("+")) return str2 + str1;
+        if (ope.equals("-")) return str2 - str1;
+        if (ope.equals("*")) return str2 * str1;
+        if (ope.equals("/")) return str2 / str1;
+        return 0;
+    }
+}
+```
+
+<p><strong>TC : O(n) traverse all string</strong></p>
+<p><strong>SC : O(n) stack space</strong></p>
+
+&nbsp;
+
+## 735. Asteroid Collision <a id="735"></a>
+
+<div class="notranslate"><p>We are given an array <code>asteroids</code> of integers representing asteroids in a row.</p>
+<p>For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.</p>
+<p>Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> asteroids = [5,10,-5]
+<strong>Output:</strong> [5,10]
+<strong>Explanation:</strong> The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> asteroids = [8,-8]
+<strong>Output:</strong> []
+<strong>Explanation:</strong> The 8 and -8 collide exploding each other.
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> asteroids = [10,2,-5]
+<strong>Output:</strong> [10]
+<strong>Explanation:</strong> The 2 and -5 collide resulting in -5. The 10 and -5 collide resulting in 10.
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>2 &lt;= asteroids.length &lt;= 10<sup>4</sup></code></li>
+	<li><code>-1000 &lt;= asteroids[i] &lt;= 1000</code></li>
+	<li><code>asteroids[i] != 0</code></li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : stack, if we need compare many times with the previous number, we can use stack in this situation.</strong></p>
+
+```Java
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        for (int aster : asteroids) {
+            boolean alive = true;
+            while (alive && aster < 0 && !stack.isEmpty() && stack.peek() > 0) {
+                alive = stack.peek() < -aster; // aster 是否存在
+                if (stack.peek() <= -aster) {  // 栈顶行星爆炸
+                    stack.pop();
+                }
+            }
+            if (alive) {
+                stack.push(aster);
+            }
+        }
+        int size = stack.size();
+        int[] ans = new int[size];
+        for (int i = size - 1; i >= 0; i--) {
+            ans[i] = stack.pop();
+        }
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n) traverse time</strong></p>
+<p><strong>SC : O(n) stack space</strong></p>
+
+&nbsp;
+
+## 739. Daily Temperatures <a id="739"></a>
+
+<div class="notranslate"><p>Given an array of integers <code>temperatures</code> represents the daily temperatures, return <em>an array</em> <code>answer</code> <em>such that</em> <code>answer[i]</code> <em>is the number of days you have to wait after the</em> <code>i<sup>th</sup></code> <em>day to get a warmer temperature</em>. If there is no future day for which this is possible, keep <code>answer[i] == 0</code> instead.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<pre><strong>Input:</strong> temperatures = [73,74,75,71,69,72,76,73]
+<strong>Output:</strong> [1,1,4,2,1,1,0,0]
+</pre><p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> temperatures = [30,40,50,60]
+<strong>Output:</strong> [1,1,1,0]
+</pre><p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> temperatures = [30,60,90]
+<strong>Output:</strong> [1,1,0]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;=&nbsp;temperatures.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>30 &lt;=&nbsp;temperatures[i] &lt;= 100</code></li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : monotonic stack</strong></p>
+
+```Java
+//Personal solution:
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        Deque<Pair<Integer, Integer>> stack = new ArrayDeque<>();
+        int[] res = new int[temperatures.length];
+        for (int i = temperatures.length - 1; i >= 0; i--) {
+            int sum = 1;
+            while (!stack.isEmpty() && temperatures[stack.peekLast().getKey()] <= temperatures[i]) {
+                Pair<Integer, Integer> top = stack.pollLast();
+                res[top.getKey()] = top.getValue();
+                sum += top.getValue();
+            }
+            Pair<Integer, Integer> cur = new Pair<>(i, sum);
+            stack.offerLast(cur);
+        }
+        while (!stack.isEmpty()) {
+            Pair<Integer, Integer> top = stack.pollLast();
+            res[top.getKey()] = top.getValue();
+        }
+        // from right to left set 0 to no warmer day
+        int max = Integer.MIN_VALUE;
+        int j = temperatures.length - 1;
+        while (j >= 0) {
+            if (temperatures[j] >= max) {
+                res[j] = 0;
+                max = Math.max(temperatures[j], max);
+            };
+            j--;
+        }
+        return res;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(n)</strong></p>
+
+<p><strong>Solution2 : monotonic stack (OPT way)</strong></p>
+
+```Java
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int length = temperatures.length;
+        int[] ans = new int[length];
+        Deque<Integer> stack = new LinkedList<Integer>();
+        for (int i = 0; i < length; i++) {
+            int temperature = temperatures[i];
+            while (!stack.isEmpty() && temperature > temperatures[stack.peek()]) {
+                int prevIndex = stack.pop();
+                ans[prevIndex] = i - prevIndex;
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(n)</strong></p>
 
 &nbsp;
