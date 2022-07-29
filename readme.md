@@ -72,6 +72,12 @@
 
 [739. Daily Temperatures](#739)
 
+[84. Largest Rectangle in Histogram](#84)
+
+[85. Maximal Rectangle](#85)
+
+[919. Complete Binary Tree Inserter](#919)
+
 &nbsp;
 
 # categories
@@ -176,11 +182,19 @@
 
 [739. Daily Temperatures](#739)
 
+[84. Largest Rectangle in Histogram](#84)
+
+[85. Maximal Rectangle](#85)
+
+## queue
+
+[919. Complete Binary Tree Inserter](#919)
+
 # demo
 
 <!-- from here -->
 
-## 739. Daily Temperatures <a id=""></a>
+## 919. Complete Binary Tree Inserter <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -3077,5 +3091,246 @@ class Solution {
 
 <p><strong>TC : O(n)</strong></p>
 <p><strong>SC : O(n)</strong></p>
+
+&nbsp;
+
+## 84. Largest Rectangle in Histogram <a id="84"></a>
+
+<div class="notranslate"><p>Given an array of integers <code>heights</code> representing the histogram's bar height where the width of each bar is <code>1</code>, return <em>the area of the largest rectangle in the histogram</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 522px; height: 242px;" src="https://assets.leetcode.com/uploads/2021/01/04/histogram.jpg" alt="">
+<pre><strong>Input:</strong> heights = [2,1,5,6,2,3]
+<strong>Output:</strong> 10
+<strong>Explanation:</strong> The above is a histogram where width of each bar is 1.
+The largest rectangle is shown in the red area, which has an area = 10 units.
+</pre>
+<p><strong>Example 2:</strong></p>
+<img style="width: 202px; height: 362px;" src="https://assets.leetcode.com/uploads/2021/01/04/histogram-1.jpg" alt="">
+<pre><strong>Input:</strong> heights = [2,4]
+<strong>Output:</strong> 4
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>1 &lt;= heights.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>0 &lt;= heights[i] &lt;= 10<sup>4</sup></code></li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : monotonic stack</strong></p>
+
+```Java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int[] minLeft = new int[heights.length];
+        int[] minRight = new int[heights.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+        // -1 means it can extend to the border
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peekLast()] >= heights[i]) {
+                stack.pollLast();
+            }
+            minLeft[i] = stack.isEmpty() ? -1 : stack.peekLast();
+            stack.offerLast(i);
+        }
+        stack.clear();
+        for (int i = heights.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {
+                stack.pollLast();
+            }
+            minRight[i] = stack.isEmpty() ? heights.length : stack.peekLast();
+            stack.offerLast(i);
+        }
+        //
+        int globalMax = Integer.MIN_VALUE;
+        for (int i = 0; i < heights.length; i++) {
+            int area = (minRight[i] - minLeft[i] - 1) * heights[i];
+            globalMax = Math.max(globalMax, area);
+        }
+        return globalMax;
+    }
+}
+```
+
+<p><strong>TC : O(n)</strong></p>
+<p><strong>SC : O(n)</strong></p>
+
+&nbsp;
+
+## 85. Maximal Rectangle <a id="85"></a>
+
+<div class="notranslate"><p>Given a <code>rows x cols</code>&nbsp;binary <code>matrix</code> filled with <code>0</code>'s and <code>1</code>'s, find the largest rectangle containing only <code>1</code>'s and return <em>its area</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 402px; height: 322px;" src="https://assets.leetcode.com/uploads/2020/09/14/maximal.jpg" alt="">
+<pre><strong>Input:</strong> matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> The maximal rectangle is shown in the above picture.
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> matrix = [["0"]]
+<strong>Output:</strong> 0
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> matrix = [["1"]]
+<strong>Output:</strong> 1
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li><code>rows == matrix.length</code></li>
+	<li><code>cols == matrix[i].length</code></li>
+	<li><code>1 &lt;= row, cols &lt;= 200</code></li>
+	<li><code>matrix[i][j]</code> is <code>'0'</code> or <code>'1'</code>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : prefix sum + monotonic stack</strong></p>
+
+```Java
+class Solution {
+    public int maximalRectangle(String[] matrix) {
+        if (matrix == null || matrix.length == 0) return 0;
+        int[] sum = new int[] {0};
+        int[][] mt = new int[matrix.length][matrix[0].length()];
+        // initialize the prefix sum matrix
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length(); j++) {
+                if (i == 0 || mt[i - 1][j] == 0 || matrix[i].charAt(j) == '0') mt[i][j] = matrix[i].charAt(j) - '0';
+                else {
+                    mt[i][j] = mt[i - 1][j] + matrix[i].charAt(j) - '0';
+                }
+            }
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            // it is the same with the problem 84
+            largestRectangleArea(mt[i], sum);
+        }
+        return sum[0];
+    }
+    private void largestRectangleArea(int[] heights, int[] sum) {
+        int[] minLeft = new int[heights.length];
+        int[] minRight = new int[heights.length];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i = 0; i < heights.length; i++) {
+            while (!stack.isEmpty() && heights[stack.peekLast()] >= heights[i]) {
+                stack.pollLast();
+            }
+            minLeft[i] = stack.isEmpty() ? -1 : stack.peekLast();
+            stack.offerLast(i);
+        }
+        stack.clear();
+        for (int i = heights.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {
+                stack.pollLast();
+            }
+            minRight[i] = stack.isEmpty() ? heights.length : stack.peekLast();
+            stack.offerLast(i);
+        }
+        //
+        for (int i = 0; i < heights.length; i++) {
+            int area = (minRight[i] - minLeft[i] - 1) * heights[i];
+            sum[0] = Math.max(sum[0], area);
+        }
+        return;
+    }
+}
+```
+
+<p><strong>TC : O(mn) m n is the shape of the matrix</strong></p>
+<p><strong>SC : O(mn)</strong></p>
+
+&nbsp;
+
+## 919. Complete Binary Tree Inserter <a id=""></a>
+
+<div class="notranslate"><p>A <strong>complete binary tree</strong> is a binary tree in which every level, except possibly the last, is completely filled, and all nodes are as far left as possible.</p>
+<p>Design an algorithm to insert a new node to a complete binary tree keeping it complete after the insertion.</p>
+<p>Implement the <code>CBTInserter</code> class:</p>
+<ul>
+	<li><code>CBTInserter(TreeNode root)</code> Initializes the data structure with the <code>root</code> of the complete binary tree.</li>
+	<li><code>int insert(int v)</code> Inserts a <code>TreeNode</code> into the tree with value <code>Node.val == val</code> so that the tree remains complete, and returns the value of the parent of the inserted <code>TreeNode</code>.</li>
+	<li><code>TreeNode get_root()</code> Returns the root node of the tree.</li>
+</ul>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 500px; height: 143px;" src="https://assets.leetcode.com/uploads/2021/08/03/lc-treeinsert.jpg" alt="">
+<pre><strong>Input</strong>
+["CBTInserter", "insert", "insert", "get_root"]
+[[[1, 2]], [3], [4], []]
+<strong>Output</strong>
+[null, 1, 2, [1, 2, 3, 4]]
+<strong>Explanation</strong>
+CBTInserter cBTInserter = new CBTInserter([1, 2]);
+cBTInserter.insert(3);  // return 1
+cBTInserter.insert(4);  // return 2
+cBTInserter.get_root(); // return [1, 2, 3, 4]
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the tree will be in the range <code>[1, 1000]</code>.</li>
+	<li><code>0 &lt;= Node.val &lt;= 5000</code></li>
+	<li><code>root</code> is a complete binary tree.</li>
+	<li><code>0 &lt;= val &lt;= 5000</code></li>
+	<li>At most <code>10<sup>4</sup></code> calls will be made to <code>insert</code> and <code>get_root</code>.</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Use queue to do a level order BFS</strong></p>
+
+```Java
+class CBTInserter {
+    TreeNode root;
+    Deque<TreeNode> queue;
+
+    public CBTInserter(TreeNode root) {
+        queue = new ArrayDeque<>();
+        this.root = root;
+        // do a level order BFS, the condition we add to queue is not both left and right are exists.
+        Deque<TreeNode> queueLevel = new ArrayDeque<>();
+        queueLevel.offerLast(root);
+        while (!queueLevel.isEmpty()) {
+            TreeNode cur = queueLevel.pollFirst();
+            // store
+            if (!(cur.left != null && cur.right != null)) {
+                queue.offerLast(cur);
+            }
+            if (cur.left != null) {
+                queueLevel.offerLast(cur.left);
+            }
+            if (cur.right != null) {
+                queueLevel.offerLast(cur.right);
+            }
+        }
+    }
+    // all nodes in queue is
+    public int insert(int val) {
+        TreeNode cur = queue.peekFirst();
+        TreeNode newNode = new TreeNode(val);
+        if (cur.left == null) {
+            cur.left = newNode;
+            queue.offerLast(newNode);
+        } else {
+            cur.right = newNode;
+            queue.offerLast(newNode);
+            queue.pollFirst();
+        }
+        return cur.val;
+    }
+
+    public TreeNode get_root() {
+        return this.root;
+    }
+}
+```
+
+<p><strong>TC : O(n) initilize and O(1) insert and get</strong></p>
+<p><strong>SC : O(n + insert times)</strong></p>
 
 &nbsp;
