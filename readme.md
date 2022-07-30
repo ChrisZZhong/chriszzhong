@@ -78,6 +78,8 @@
 
 [919. Complete Binary Tree Inserter](#919)
 
+[199. Binary Tree Right Side View](#199)
+
 &nbsp;
 
 # categories
@@ -190,11 +192,13 @@
 
 [919. Complete Binary Tree Inserter](#919)
 
+[199. Binary Tree Right Side View](#199)
+
 # demo
 
 <!-- from here -->
 
-## 919. Complete Binary Tree Inserter <a id=""></a>
+## 199. Binary Tree Right Side View <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -3332,5 +3336,98 @@ class CBTInserter {
 
 <p><strong>TC : O(n) initilize and O(1) insert and get</strong></p>
 <p><strong>SC : O(n + insert times)</strong></p>
+
+&nbsp;
+
+## 199. Binary Tree Right Side View <a id="199"></a>
+
+<div class="notranslate"><p>Given the <code>root</code> of a binary tree, imagine yourself standing on the <strong>right side</strong> of it, return <em>the values of the nodes you can see ordered from top to bottom</em>.</p>
+<p>&nbsp;</p>
+<p><strong>Example 1:</strong></p>
+<img style="width: 401px; height: 301px;" src="https://assets.leetcode.com/uploads/2021/02/14/tree.jpg" alt="">
+<pre><strong>Input:</strong> root = [1,2,3,null,5,null,4]
+<strong>Output:</strong> [1,3,4]
+</pre>
+<p><strong>Example 2:</strong></p>
+<pre><strong>Input:</strong> root = [1,null,3]
+<strong>Output:</strong> [1,3]
+</pre>
+<p><strong>Example 3:</strong></p>
+<pre><strong>Input:</strong> root = []
+<strong>Output:</strong> []
+</pre>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+<ul>
+	<li>The number of nodes in the tree is in the range <code>[0, 100]</code>.</li>
+	<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+<p><strong>Solution : BFS, Queue always comes with BFS, in binary tree, it always combines with the level order traverse.</strong></p>
+
+```Java
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) return res;
+        Deque<TreeNode> queue = new ArrayDeque<>();
+        queue.offerLast(root);
+        while (!queue.isEmpty()) {
+            res.add(queue.peekFirst().val);
+            int size = queue.size();
+            while (size -- > 0) {
+                TreeNode cur = queue.pollFirst();
+                // root, right, left
+                if (cur.right != null) {
+                    queue.offerLast(cur.right);
+                }
+                if (cur.left != null) {
+                    queue.offerLast(cur.left);
+                }
+
+            }
+        }
+        return res;
+    }
+}
+
+```
+
+<p><strong>TC : O(n) n is the nodes of the tree</strong></p>
+<p><strong>SC : O(n)</strong></p>
+
+&nbsp;
+
+<p><strong>Solution2 : DFS, DFS is another solution here</strong></p>
+
+```Java
+class Solution {
+    List<Integer> res = new ArrayList<>();
+
+    public List<Integer> rightSideView(TreeNode root) {
+        dfs(root, 0);
+        return res;
+    }
+
+    private void dfs(TreeNode root, int depth) {
+        if (root == null) {
+            return;
+        }
+        // root, right, left
+        if (depth == res.size()) {   // res == depth means this is the rightest node in this level.
+            res.add(root.val);
+        }
+        depth++;
+        dfs(root.right, depth);
+        dfs(root.left, depth);
+    }
+}
+
+```
+
+<p><strong>TC : O(n) n is the nodes of the tree</strong></p>
+<p><strong>SC : O(n) is call stack</strong></p>
 
 &nbsp;
