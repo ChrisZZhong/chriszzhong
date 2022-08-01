@@ -4,11 +4,15 @@
 
 [690. Employee Importance](#690)
 
+## Binary search
+
+[875. Koko Eating Bananas](#875)
+
 # demo
 
 <!-- from here -->
 
-## 539. Minimum Time Difference <a id=""></a>
+## 875. Koko Eating Bananas <a id=""></a>
 
 <p>&nbsp;</p>
 <p><strong>Solution : </strong></p>
@@ -132,3 +136,45 @@ class Solution {
 
 <p><strong>TC : O(n) less than all employees</strong></p>
 <p><strong>SC : O(n) map space + call stack</strong></p>
+
+## 875. Koko Eating Bananas <a id="875"></a>
+
+<p>&nbsp;</p>
+<p><strong>Solution : Binary search. This problem is hard to find that we could use binary search to solve this problem.</strong></p>
+
+```Java
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1;
+        int right = Integer.MAX_VALUE;
+        for (int pile : piles) {
+            right = Math.max(right, pile);
+        }
+        // do a binary search here
+        while (left < right - 1) {
+            int mid = left + (right - left) / 2;
+            if (getCount(piles, mid) <= h) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return getCount(piles, left) <= h ? left : right;
+    }
+    private int getCount(int[] piles, int k) {
+        int count = 0;
+        for (int pile : piles) {
+            count += pile / k;
+            if (pile % k != 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+
+<p><strong>TC : O(n * logn) --> O(n) for traverse the pile to getCount, O(logn) for binary search</strong></p>
+<p><strong>SC : O(1)</strong></p>
+
+&nbsp;
