@@ -1155,31 +1155,23 @@ class NumMatrix {
 ```Java
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
+        // 由于是固定长度，我们只用一个指针i来实现滑动窗口 init 把所有s1的字符添加到map中
         Map<Character, Integer> map = new HashMap<>();
-        // initialize
         for (char ch : s1.toCharArray()) {
             map.put(ch, map.getOrDefault(ch, 0) + 1);
         }
-        //
-        int i = 0;
-        int j = 0;
-        while (j < s2.length()) {
-            // for those characters not in the s1, ignore them to improve the compare time
-            if (map.containsKey(s2.charAt(j))) {
-                map.put(s2.charAt(j), map.get(s2.charAt(j)) - 1);
-            }
-            if (j < i + s1.length() - 1) {
-                j++;
-                continue;
-            }
-            // check
-            if (contains(map)) return true;
-            // i++
+
+        for (int i = 0; i < s2.length(); i++) {
+            // 固定长度后，我们只update s1中有的字符， 无论怎样，遍历当前的字符 如果在s1中出现，更新其值
             if (map.containsKey(s2.charAt(i))) {
-                map.put(s2.charAt(i), map.get(s2.charAt(i)) + 1);
+                map.put(s2.charAt(i), map.get(s2.charAt(i)) - 1);
             }
-            i++;
-            j++;
+            // 当i长度达到s1之后，往后每次移动，要移除前边的字符，如果不在s1中出现可以不管，因为没有记录
+            if (i >= s1.length() && map.containsKey(s2.charAt(i - s1.length()))) {
+                map.put(s2.charAt(i - s1.length()), map.get(s2.charAt(i - s1.length())) + 1);
+            }
+            // 判断map中所有元素是否均为0
+            if (contains(map)) return true;
         }
         return false;
     }
