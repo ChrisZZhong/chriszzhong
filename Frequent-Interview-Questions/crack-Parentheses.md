@@ -2,10 +2,11 @@
 
 LeetCode : [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)
 
-| LeetCode                                                                                                                       | Difficulty |
-| ------------------------------------------------------------------------------------------------------------------------------ | ---------- |
-| [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)                                          | Easy       |
-| [921. Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/description/) | Medium     |
+| LeetCode                                                                                                                                      | Difficulty |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [20. Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)                                                         | Easy       |
+| [921. Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/description/)                | Medium     |
+| [1541. Minimum Insertions to Balance a Parentheses String](https://leetcode.com/problems/minimum-insertions-to-balance-a-parentheses-string/) | Medium     |
 
 ## 1. Valid Parentheses 单一括号
 
