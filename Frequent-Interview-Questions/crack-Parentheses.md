@@ -15,6 +15,8 @@ LeetCode : [20. Valid Parentheses](https://leetcode.com/problems/valid-parenthes
 
 **每个右括号的左边必须有一个左括号**
 
+<!-- muliti_language -->
+
 ```Java
 /**
 * 一个字符串合法括号字符串的条件:
@@ -61,6 +63,8 @@ boolean isValid(String str) {
         2） 遇到闭括号时：
             1 栈是否为空？ false
             2 括号是否可以匹配上？ stack.pop() : false
+
+<!-- muliti_language -->
 
 ```Java
 class Solution {
@@ -109,6 +113,8 @@ class Solution {
 
         比如说 s = "))(" 这种情况，插入 2 个左括号之后，还要再插入 1 个右括号，使得 s 变成 "()()()"，才是一个有效括号串。
 
+<!-- muliti_language -->
+
 ```Java
 /**
  * 给定一个由 '(' 和 ')' 括号组成的字符串 S，我们需要添加最少的括号（ '(' 或是 ')'，可以在任何位置），以使得到的括号字符串有效。
@@ -152,6 +158,8 @@ public int minAddToMakeValid(String S) {
     核心思路还是和刚才一样，通过一个 need 变量记录对右括号的需求数，根据 need 的变化来判断是否需要插入
     1) 比如说当 s = ")"，我们肯定需要插入一个左括号让 s = "()"，但是由于一个左括号需要两个右括号，所以对右括号的需求量变为 1：
 
+<!-- muliti_language -->
+
 ```Java
 if (s[i] == ')') {
     need--;
@@ -169,6 +177,8 @@ if (s[i] == ')') {
     另外，当遇到左括号时，若对右括号的需求量为奇数，需要插入 1 个右括号。因为一个左括号需要两个右括号嘛，右括号的需求必须是偶数，这一点也是本题的难点。
     要及时处理 when input : ()()))
 
+<!-- muliti_language -->
+
 ```Java
 // when input : ()()))
 if (s[i] == '(') {
@@ -184,6 +194,8 @@ if (s[i] == '(') {
 ```
 
     solution：
+
+<!-- muliti_language -->
 
 ```Java
 
