@@ -1,1 +1,1 @@
-[Java Core](./Java%20Core/Java-Core.md)
+[Java Core](./Java-Core/Java-Core.md)
