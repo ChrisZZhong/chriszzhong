@@ -5,7 +5,7 @@
 - **A class should have one and only one reason to change, meaning that a class should have only one job.**
 
   **Example:**  
-   Suppose you have a shape class, like triangle, you want to have a method to give you the area of the shape, instead of writing a method called calculateArea, you should create a new class called areaCalculator which is responsible for calculating area of all types, and call areaCalculator when you need to calculate the area.
+  Suppose you have a shape class, like triangle, you want to have a method to give you the area of the shape, instead of writing a method called calculateArea, you should create a new class called areaCalculator which is responsible for calculating area of all types, and call areaCalculator when you need to calculate the area.
 
 ## Open-Closed Principle
 
