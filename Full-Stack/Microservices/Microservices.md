@@ -6,6 +6,8 @@
 
 [Fault Tolerance](./fault-tolerance.md)
 
+[Service Discovery](./service-discovery.md)
+
 [Swagger](./swagger.md)
 
 [API Gateway](./api-gateway.md)
