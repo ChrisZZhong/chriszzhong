@@ -13,3 +13,5 @@
 [Swagger](./swagger.md)
 
 [API Gateway](./api-gateway.md)
+
+[Debug in Microservices](./debug-in-microservices.md)
