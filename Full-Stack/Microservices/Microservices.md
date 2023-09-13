@@ -6,7 +6,9 @@
 
 [Fault Tolerance](./fault-tolerance.md)
 
-[Service Discovery](./service-discovery.md)
+[Service Discovery and Communicate](./service-discovery.md)
+
+[Monitoring](./monitoring.md)
 
 [Swagger](./swagger.md)
 
