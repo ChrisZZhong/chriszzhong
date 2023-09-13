@@ -633,7 +633,7 @@ class Solution {
 
 <p><strong>Solution : use two pointer to solve this problem; Notice that the given array is already sorted. If unsorted, we can use hashMap to solve this problem with TC O(n) and SC O(n)</strong></p>
 
-<img src = "./photo/167.png">
+<img src = "../photo/167.png">
 
 ```Java
 class Solution {

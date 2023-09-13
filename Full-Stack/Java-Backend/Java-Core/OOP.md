@@ -1,6 +1,6 @@
 # OOP
 
-    Object-oriented programming aims to implement real-world entities, the main aim is to bind together the data and functions that operate on them so that no other part of the code can access this data except that function.
+Object-oriented programming aims to implement real-world entities, the main aim is to bind together the data and functions that operate on them so that no other part of the code can access this data except that function.
 
 ## Inheritance
 
