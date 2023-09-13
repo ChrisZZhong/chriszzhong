@@ -17,3 +17,5 @@
 [Debug in Microservices](./debug-in-microservices.md)
 
 [Async Communication / RabbitMQ (@Async & message queue)](./async-communication.md)
+
+[Spring Cloud Config](./spring-cloud-config.md)
