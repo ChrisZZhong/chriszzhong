@@ -19,3 +19,7 @@
 [Async Communication / RabbitMQ (@Async & message queue)](./async-communication.md)
 
 [Spring Cloud Config](./spring-cloud-config.md)
+
+[Authentication and Authorization](./authentication-and-authorization.md)
+
+[Kafka](./kafka.md)
