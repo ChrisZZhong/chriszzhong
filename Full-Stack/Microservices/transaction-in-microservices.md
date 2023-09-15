@@ -24,7 +24,7 @@ It has two phases:
 
 The `Saga Pattern` is a crucial design pattern used in distributed systems and microservices architectures to effectively `manage complex and long-running transactions` while `ensuring data consistency`. It addresses the challenges that arise when multiple services need to collaborate in a transactional process, particularly in scenarios where a traditional two-phase commit (2PC) approach isn't practical or efficient.
 
-<img src = "../../photo/Full-Stack/Microservices/saga-design-pattern.png">
+<img src = "../../photo/Full-Stack/Microservices/Saga-design-pattern.png">
 
 ### How it works
 
