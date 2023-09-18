@@ -1,4 +1,4 @@
-[leet code interview](面经/readme.md)
+[leet code interview](面经/interview-problems.md)
 
 # leetcode 剑指 offer
 
