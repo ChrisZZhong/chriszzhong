@@ -1,0 +1,61 @@
+# Basic
+title: Zhicheng Zhong
+subtitle: Personal Blog
+description: Welcome to my blog
+# 头像里面的标题
+avatarTitle: Zhicheng Zhong
+# 头像里面的描述
+avatarDesc: Software Engineer
+url: "https://chriszzhong.github.io/Portfolio/"
+
+# 博客是否自动生成目录，false为不生成
+enableToc: true
+
+# Comment
+comment:
+    # livere: MTAyMC81MDk5NC8yNzQ3Ng  # https://www.livere.com
+    disqus: leopard
+    # uyan: 2143225  # 有言id,登录有言官网申请
+
+# Social
+social:
+    portfolio: chriszzhong.github.io/Portfolio/
+    github: ChrisZZhong
+#    jianshu:
+    # twitter: 
+    mail: zzcjob397@gmail.com
+
+# 《----------------- 上面的信息修改成你自己的 ---------------------------》
+#
+#
+#  _post/ 下的文章更换成你自己的文章
+#
+# 《--------------- 下面的信息可以自行选择是否修改 ------------------------》
+
+
+permalink: /:year/:month/:title/
+# Format
+highlighter: rouge
+
+textColor: #FF0000
+
+# supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
+cover_color: clear
+
+# The blog button should not be removed.
+blog_button:
+    title: Home
+
+# Navigation buttons in the front page.s
+nav:
+    - {title: All Articles, description: archive, url: '/archive'}
+    - {title: Tags, description: tags, url: '/tags'}
+    - {title: About, description: about, url: '/about'}
+    
+
+# Pagination
+gems: [jekyll-paginate,jekyll-sitemap]
+paginate: 20
+paginate_path: "page/:num/"
+
+
