@@ -5,15 +5,24 @@
 [![Linkedin Badge](https://img.shields.io/badge/-Zhicheng-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/zhicheng-z-35805722b/)](https://www.linkedin.com/in/zhicheng-z-35805722b/)
 [![Gmail Badge](https://img.shields.io/badge/-zzcjob397@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:zzcjob397@gmail.com)](mailto:zzcjob397@gmail.com)
 
+<<<<<<< HEAD
 - 🎯 Portfolio website: [Portfolio](https://chriszzhong.github.io/Portfolio/)
 - 🔭 Personal Blog: [Blog](https://chriszzhong.github.io/)
 - 💬 Ask me about anything, I am happy to help :smile:
 - 📬 How to reach me: [Let's get in touch!](https://www.linkedin.com/in/zhicheng-z-35805722b/)
+=======
+## [Personal AI Agent](http://ec2-3-143-4-120.us-east-2.compute.amazonaws.com:8080/)
+
+**This is an Ai Agent integrated with Gemini API, have a try with it**
+
+## [Blog](https://chriszzhong.github.io/)
+>>>>>>> ec18b1655706173151556919f49fc95617fa8dce
 
 ### Languages and Tools:
 
 <img align="left" src="https://www.vectorlogo.zone/logos/java/java-horizontal.svg" alt="Java">
 
+<<<<<<< HEAD
 <img align="left" src="https://www.vectorlogo.zone/logos/python/python-horizontal.svg" alt="Python">
 
 <img align="left" src="https://www.vectorlogo.zone/logos/w3_html5/w3_html5-ar21.svg" alt="HTML5">
@@ -53,3 +62,6 @@
 
 <div align="center">
 <h3 align="center">Show some &nbsp;❤️&nbsp; by starring some of the repositories!</h3>
+=======
+**Please check it out here [Blog](https://chriszzhong.github.io/).**
+>>>>>>> ec18b1655706173151556919f49fc95617fa8dce
