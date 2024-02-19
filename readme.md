@@ -5,7 +5,6 @@
 [![Linkedin Badge](https://img.shields.io/badge/-Zhicheng-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/zhicheng-z-35805722b/)](https://www.linkedin.com/in/zhicheng-z-35805722b/)
 [![Gmail Badge](https://img.shields.io/badge/-zzcjob397@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:zzcjob397@gmail.com)](mailto:zzcjob397@gmail.com)
 
-- 🎯 Portfolio website: [Portfolio](https://chriszzhong.github.io/Portfolio/)
 - 🔭 Personal Blog: [Blog](https://chriszzhong.github.io/)
 - 💬 Ask me about anything, I am happy to help :smile:
 - 📬 How to reach me: [Let's get in touch!](https://www.linkedin.com/in/zhicheng-z-35805722b/)
